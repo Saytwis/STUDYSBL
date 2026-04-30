@@ -1,0 +1,1472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Maria Potti Study Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700;9..144,800&family=Geist:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+  :root {
+    --bg: #F7F6F3;
+    --bg-soft: #EFEDE6;
+    --bg-card: #FFFFFF;
+    --ink: #191918;
+    --ink-soft: #4A4A47;
+    --ink-faint: #87867F;
+    --line: #E5E2D9;
+    --line-strong: #D4D0C4;
+    --accent: #2D5F4F;
+    --accent-soft: #DCEAE3;
+    --warn: #D97757;
+    --warn-soft: #F8E5DC;
+    --gold: #B58B3A;
+    --gold-soft: #F4E9CF;
+    --shadow: 0 4px 24px rgba(0,0,0,0.04);
+    --serif: 'Fraunces', Georgia, serif;
+    --sans: 'Geist', -apple-system, sans-serif;
+    --mono: 'JetBrains Mono', monospace;
+  }
+  [data-theme="dark"] {
+    --bg: #1A1A19;
+    --bg-soft: #232321;
+    --bg-card: #252522;
+    --ink: #ECEAE3;
+    --ink-soft: #B5B2A8;
+    --ink-faint: #807D74;
+    --line: #36352F;
+    --line-strong: #4A4943;
+    --accent: #6FB89A;
+    --accent-soft: rgba(111, 184, 154, 0.12);
+    --warn: #E89175;
+    --warn-soft: rgba(232, 145, 117, 0.12);
+    --gold: #D4AF6A;
+    --gold-soft: rgba(212, 175, 106, 0.12);
+    --shadow: 0 4px 24px rgba(0,0,0,0.3);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: var(--sans); background: var(--bg); color: var(--ink); line-height: 1.6; font-size: 16px; -webkit-font-smoothing: antialiased; transition: background 0.3s ease, color 0.3s ease; }
+
+  /* === ANIMATED LOGIN SCREEN === */
+  .login-screen {
+    position: fixed; inset: 0;
+    background: var(--bg);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 1000;
+    overflow: hidden;
+  }
+
+  /* Floating gradient orbs */
+  .orb {
+    position: absolute; border-radius: 50%;
+    filter: blur(60px); opacity: 0.5;
+    pointer-events: none;
+    animation: float 18s ease-in-out infinite;
+  }
+  .orb-1 { width: 380px; height: 380px; background: radial-gradient(circle, var(--accent), transparent 70%); top: -80px; left: -80px; animation-delay: 0s; }
+  .orb-2 { width: 320px; height: 320px; background: radial-gradient(circle, var(--gold), transparent 70%); bottom: -60px; right: -60px; animation-delay: -6s; opacity: 0.35; }
+  .orb-3 { width: 260px; height: 260px; background: radial-gradient(circle, var(--warn), transparent 70%); top: 50%; left: 60%; animation-delay: -12s; opacity: 0.25; }
+  [data-theme="dark"] .orb-1 { opacity: 0.4; }
+  [data-theme="dark"] .orb-2 { opacity: 0.3; }
+  [data-theme="dark"] .orb-3 { opacity: 0.25; }
+
+  @keyframes float {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(40px, -30px) scale(1.08); }
+    66% { transform: translate(-30px, 40px) scale(0.95); }
+  }
+
+  .login-card {
+    position: relative; z-index: 1;
+    max-width: 440px; width: calc(100% - 40px);
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    padding: 44px 40px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.08), 0 4px 12px rgba(0,0,0,0.04);
+    animation: cardIn 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  [data-theme="dark"] .login-card { box-shadow: 0 20px 60px rgba(0,0,0,0.4); }
+  @keyframes cardIn {
+    from { opacity: 0; transform: translateY(24px) scale(0.96); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  .login-eyebrow {
+    font-family: var(--mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.14em;
+    color: var(--ink-faint); margin-bottom: 10px;
+    animation: fadeUp 0.6s 0.15s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+  }
+  .login-greeting {
+    font-family: var(--serif); font-size: 44px; font-weight: 400; line-height: 1.05;
+    letter-spacing: -0.02em; margin-bottom: 6px; color: var(--ink);
+    animation: fadeUp 0.6s 0.25s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+  }
+  .login-greeting em {
+    font-family: 'Caveat', cursive;
+    font-style: normal;
+    font-weight: 600;
+    color: var(--accent);
+    font-size: 1.4em;
+    letter-spacing: 0;
+    background: linear-gradient(105deg, var(--accent), var(--gold));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    padding: 0 4px;
+    display: inline-block;
+  }
+  .smile {
+    display: inline-block;
+    font-family: 'Caveat', cursive;
+    color: var(--gold);
+    font-size: 1.1em;
+    font-weight: 600;
+    margin-left: 6px;
+    vertical-align: baseline;
+    animation: smileBob 3s ease-in-out infinite;
+    transform-origin: center;
+  }
+  @keyframes smileBob {
+    0%, 100% { transform: rotate(-4deg) translateY(0); }
+    50% { transform: rotate(4deg) translateY(-2px); }
+  }
+  .login-sub {
+    font-size: 15px; color: var(--ink-soft); margin-bottom: 28px;
+    animation: fadeUp 0.6s 0.35s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .login-form { animation: fadeUp 0.6s 0.45s cubic-bezier(0.22, 1, 0.36, 1) backwards; }
+  .login-field { margin-bottom: 14px; }
+  .login-field label {
+    display: block; font-family: var(--mono); font-size: 10px; text-transform: uppercase;
+    letter-spacing: 0.1em; color: var(--ink-faint); margin-bottom: 6px; font-weight: 500;
+  }
+  .login-field input {
+    width: 100%; padding: 12px 14px;
+    border: 1px solid var(--line-strong); border-radius: 10px;
+    font-family: var(--sans); font-size: 15px;
+    background: var(--bg); color: var(--ink);
+    transition: border-color 0.18s, box-shadow 0.18s;
+  }
+  .login-field input:focus {
+    outline: none; border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-soft);
+  }
+  .login-btn {
+    width: 100%; margin-top: 18px; padding: 14px;
+    background: var(--ink); color: var(--bg);
+    border: none; border-radius: 10px;
+    font-family: var(--sans); font-size: 15px; font-weight: 500;
+    cursor: pointer;
+    transition: transform 0.12s, opacity 0.18s, box-shadow 0.2s;
+    position: relative; overflow: hidden;
+  }
+  .login-btn:hover { box-shadow: 0 6px 20px rgba(0,0,0,0.15); transform: translateY(-1px); }
+  .login-btn:active { transform: translateY(0); }
+  .login-btn:disabled { opacity: 0.5; cursor: wait; }
+  .login-btn .spinner {
+    display: none; width: 16px; height: 16px;
+    border: 2px solid var(--bg); border-top-color: transparent;
+    border-radius: 50%; vertical-align: middle; margin-right: 8px;
+    animation: spin 0.7s linear infinite;
+  }
+  .login-btn.loading .spinner { display: inline-block; }
+  .login-btn.loading .btn-text { opacity: 0.7; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .login-error {
+    background: var(--warn-soft); color: var(--warn);
+    padding: 10px 14px; border-radius: 8px;
+    font-size: 13px; margin-top: 14px;
+    border-left: 3px solid var(--warn);
+    animation: shake 0.4s cubic-bezier(0.36, 0.07, 0.19, 0.97);
+    display: none;
+  }
+  .login-error.show { display: block; }
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20% { transform: translateX(-6px); }
+    40% { transform: translateX(6px); }
+    60% { transform: translateX(-3px); }
+    80% { transform: translateX(3px); }
+  }
+
+  .login-footer {
+    margin-top: 24px; padding-top: 20px;
+    border-top: 1px solid var(--line);
+    display: flex; align-items: center; justify-content: space-between;
+    font-size: 12px; color: var(--ink-faint);
+    animation: fadeUp 0.6s 0.55s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+  }
+  .login-footer .countdown-mini {
+    font-family: var(--serif); color: var(--accent); font-weight: 500; font-size: 13px;
+  }
+
+  /* Theme toggle on login screen */
+  .login-theme-toggle {
+    position: absolute; top: 24px; right: 24px; z-index: 2;
+    background: var(--bg-card); border: 1px solid var(--line);
+    width: 36px; height: 36px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; color: var(--ink-soft);
+    animation: fadeUp 0.6s 0.7s backwards;
+  }
+  .login-theme-toggle:hover { color: var(--ink); }
+  .login-theme-toggle svg { width: 16px; height: 16px; }
+
+  /* === MAIN APP (everything else from v3.5) === */
+  .app { display: grid; grid-template-columns: 260px 1fr; min-height: 100vh; }
+  .sidebar { border-right: 1px solid var(--line); padding: 32px 20px; position: sticky; top: 0; height: 100vh; overflow-y: auto; background: var(--bg); }
+  .brand-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
+  .brand { display: flex; align-items: baseline; gap: 6px; }
+  .brand-mark { font-family: var(--serif); font-size: 19px; font-weight: 500; letter-spacing: -0.02em; }
+  .brand-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+  .brand-sub { font-family: var(--mono); font-size: 11px; color: var(--ink-faint); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 24px; }
+
+  .theme-toggle, .menu-toggle {
+    background: none; border: 1px solid var(--line);
+    width: 30px; height: 30px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; color: var(--ink-soft); transition: all 0.15s;
+  }
+  .menu-toggle { display: none; border-radius: 6px; }
+  .theme-toggle:hover, .menu-toggle:hover { border-color: var(--ink-soft); color: var(--ink); }
+  .theme-toggle svg, .menu-toggle svg { width: 14px; height: 14px; }
+  .brand-actions { display: flex; align-items: center; gap: 8px; }
+
+  /* Sync indicator */
+  .sync-status {
+    margin-bottom: 16px; padding: 8px 12px;
+    background: var(--bg-card); border: 1px solid var(--line); border-radius: 8px;
+    display: flex; align-items: center; gap: 8px;
+    font-size: 12px; color: var(--ink-soft);
+    transition: all 0.2s;
+  }
+  .sync-dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 0 0 var(--accent);
+    transition: background 0.2s;
+  }
+  .sync-status.syncing .sync-dot { background: var(--gold); animation: pulseDot 1.2s ease-in-out infinite; }
+  .sync-status.offline .sync-dot { background: var(--warn); }
+  @keyframes pulseDot {
+    0%, 100% { box-shadow: 0 0 0 0 var(--gold); opacity: 1; }
+    50% { box-shadow: 0 0 0 6px transparent; opacity: 0.6; }
+  }
+
+  .ist-clock { margin-bottom: 24px; padding: 12px 14px; background: var(--bg-card); border: 1px solid var(--line); border-radius: 10px; }
+  .ist-clock-label { font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink-faint); margin-bottom: 4px; }
+  .ist-clock-time { font-family: var(--serif); font-size: 17px; font-weight: 500; color: var(--ink); letter-spacing: -0.01em; }
+  .ist-clock-date { font-size: 11px; color: var(--ink-soft); margin-top: 2px; font-family: var(--mono); }
+  .ist-clock-days { margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--line); display: flex; align-items: baseline; gap: 6px; }
+  .ist-clock-days-num { font-family: var(--serif); font-size: 18px; font-weight: 500; color: var(--accent); letter-spacing: -0.01em; }
+  .ist-clock-days-label { font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink-faint); }
+
+  .nav-group { margin-bottom: 24px; }
+  .nav-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink-faint); margin-bottom: 8px; padding: 0 8px; font-weight: 500; }
+  .nav-item { display: block; padding: 6px 10px; border-radius: 6px; font-size: 14px; color: var(--ink-soft); text-decoration: none; margin-bottom: 1px; cursor: pointer; transition: all 0.15s; }
+  .nav-item:hover { background: var(--bg-soft); color: var(--ink); }
+  .nav-item.active { background: var(--bg-soft); color: var(--ink); font-weight: 500; }
+  .main { padding: 56px 64px 120px; max-width: 920px; }
+
+  .hero { margin-bottom: 64px; }
+  .greeting { font-family: var(--mono); font-size: 12px; color: var(--ink-faint); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 16px; }
+  .hero h1 { font-family: var(--serif); font-weight: 400; font-size: 56px; line-height: 1.05; letter-spacing: -0.02em; margin-bottom: 24px; color: var(--ink); }
+  .hero h1 em { font-style: italic; color: var(--accent); }
+  .hero-sub { font-size: 18px; color: var(--ink-soft); max-width: 580px; line-height: 1.55; }
+
+  .countdown { margin-top: 40px; padding: 24px 28px; background: var(--bg-card); border: 1px solid var(--line); border-radius: 14px; display: grid; grid-template-columns: 1fr auto auto auto; gap: 32px; align-items: center; }
+  .countdown-label { font-family: var(--mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink-faint); margin-bottom: 4px; }
+  .countdown-date { font-family: var(--serif); font-size: 18px; font-weight: 500; }
+  .countdown-stat { text-align: center; }
+  .countdown-num { font-family: var(--serif); font-size: 36px; font-weight: 500; line-height: 1; color: var(--ink); }
+  .countdown-unit { font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink-faint); margin-top: 4px; }
+
+  section { margin-bottom: 80px; scroll-margin-top: 24px; }
+  .section-eyebrow { font-family: var(--mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--accent); margin-bottom: 12px; }
+  h2 { font-family: var(--serif); font-weight: 500; font-size: 36px; line-height: 1.15; letter-spacing: -0.015em; margin-bottom: 16px; color: var(--ink); }
+  h3 { font-family: var(--serif); font-weight: 500; font-size: 22px; margin-top: 32px; margin-bottom: 12px; letter-spacing: -0.01em; color: var(--ink); }
+  h4 { font-family: var(--serif); font-weight: 500; font-size: 17px; margin-top: 20px; margin-bottom: 8px; }
+  .section-intro { font-size: 17px; color: var(--ink-soft); max-width: 640px; margin-bottom: 32px; line-height: 1.6; }
+  p { margin-bottom: 12px; }
+  .main p { font-size: 15px; }
+  ul, ol { margin: 8px 0 16px 20px; }
+  li { margin-bottom: 6px; font-size: 15px; color: var(--ink); }
+  strong { font-weight: 600; }
+  em { font-style: italic; }
+
+  .phases { display: flex; flex-direction: column; gap: 16px; margin-top: 24px; }
+  .phase-card { background: var(--bg-card); border: 1px solid var(--line); border-radius: 12px; padding: 24px 28px; display: grid; grid-template-columns: auto 1fr auto; gap: 24px; align-items: center; transition: all 0.2s; }
+  .phase-card.active { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+  .phase-card.completed { opacity: 0.7; }
+  .phase-num { font-family: var(--serif); font-size: 28px; font-weight: 500; color: var(--ink-faint); width: 56px; text-align: center; }
+  .phase-card.active .phase-num { color: var(--accent); }
+  .phase-card.completed .phase-num { color: var(--accent); }
+  .phase-content h4 { font-family: var(--serif); font-size: 19px; font-weight: 500; margin: 0 0 4px 0; }
+  .phase-content p { font-size: 14px; color: var(--ink-soft); margin: 0; }
+  .phase-meta { text-align: right; font-family: var(--mono); font-size: 11px; color: var(--ink-faint); text-transform: uppercase; letter-spacing: 0.08em; }
+  .phase-status { display: inline-block; padding: 3px 8px; border-radius: 4px; margin-top: 4px; font-weight: 500; }
+  .status-active { background: var(--accent-soft); color: var(--accent); }
+  .status-locked { background: var(--bg-soft); color: var(--ink-faint); }
+  .status-done { background: var(--accent-soft); color: var(--accent); }
+
+  .chapters { display: grid; grid-template-columns: 1fr; gap: 6px; margin-top: 16px; }
+  .chapter-row { background: var(--bg-card); border: 1px solid var(--line); border-radius: 8px; transition: border-color 0.15s; }
+  .chapter-row:hover { border-color: var(--line-strong); }
+  .chapter-header { display: flex; align-items: center; gap: 12px; padding: 12px 14px; cursor: pointer; }
+  .chapter-header input[type="checkbox"] { margin: 0; accent-color: var(--accent); cursor: pointer; }
+  .chapter-num { font-family: var(--mono); font-size: 11px; color: var(--ink-faint); min-width: 36px; }
+  .chapter-title { font-size: 14px; font-weight: 500; flex: 1; }
+  .chapter-row.checked .chapter-title { text-decoration: line-through; color: var(--ink-faint); }
+  .chapter-toggle { font-family: var(--mono); font-size: 11px; color: var(--ink-faint); background: none; border: 1px solid var(--line); border-radius: 4px; padding: 3px 8px; cursor: pointer; }
+  .chapter-toggle:hover { color: var(--ink); border-color: var(--line-strong); }
+  .chapter-content { padding: 0 18px 20px 62px; font-size: 14px; line-height: 1.65; display: none; }
+  .chapter-row.expanded .chapter-content { display: block; }
+  .chapter-content h5 { font-family: var(--serif); font-size: 15px; font-weight: 500; margin-top: 14px; margin-bottom: 6px; color: var(--ink); }
+  .chapter-content p { font-size: 14px; margin-bottom: 8px; color: var(--ink-soft); }
+  .chapter-content ul { margin: 4px 0 12px 16px; }
+  .chapter-content li { font-size: 13.5px; color: var(--ink-soft); margin-bottom: 4px; }
+  .chapter-content .model-name { color: var(--ink); font-weight: 600; }
+  .chapter-content .key-line { background: var(--accent-soft); padding: 8px 12px; border-left: 2px solid var(--accent); border-radius: 3px; margin: 8px 0; font-size: 13.5px; color: var(--ink); }
+
+  /* Ultra Notes hero */
+  .ultra-hero { background: var(--accent); color: #fff; border-radius: 14px; padding: 28px 32px; margin-bottom: 24px; position: relative; overflow: hidden; }
+  [data-theme="dark"] .ultra-hero { background: var(--accent-soft); color: var(--ink); border: 1px solid var(--accent); }
+  .ultra-hero:before { content: ""; position: absolute; right: -40px; top: -40px; width: 200px; height: 200px; background: rgba(255,255,255,0.06); border-radius: 50%; pointer-events: none; }
+  [data-theme="dark"] .ultra-hero:before { background: rgba(111, 184, 154, 0.08); }
+  .ultra-hero-eyebrow { font-family: var(--mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; opacity: 0.85; margin-bottom: 8px; position: relative; }
+  .ultra-hero-title { font-family: var(--serif); font-size: 26px; font-weight: 500; letter-spacing: -0.01em; margin: 0 0 10px 0; color: inherit; position: relative; }
+  .ultra-hero-body { font-size: 14.5px; line-height: 1.6; opacity: 0.92; max-width: 580px; margin-bottom: 16px; position: relative; color: inherit; }
+  .ultra-hero-body em { font-style: italic; }
+  .ultra-hero-body strong { font-weight: 600; }
+  .ultra-hero-btn { display: inline-block; padding: 10px 16px; background: #fff; color: var(--accent); border-radius: 8px; font-family: var(--sans); font-size: 13px; font-weight: 500; text-decoration: none; position: relative; transition: transform 0.15s; }
+  [data-theme="dark"] .ultra-hero-btn { background: var(--accent); color: #fff; }
+  .ultra-hero-btn:hover { transform: translateX(2px); }
+
+  .ultra-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-top: 16px; }
+  .ultra-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 12px; background: var(--bg-card); border: 1px solid var(--line); border-radius: 8px; font-size: 13px; }
+  .ultra-buttons { display: flex; gap: 4px; }
+  .ultra-btn { width: 22px; height: 22px; border-radius: 50%; border: 1px solid var(--line-strong); background: var(--bg); cursor: pointer; padding: 0; transition: transform 0.1s; }
+  .ultra-btn:hover { transform: scale(1.1); }
+  .ultra-btn.green.active { background: #4A8268; border-color: #4A8268; }
+  .ultra-btn.yellow.active { background: #D9A441; border-color: #D9A441; }
+  .ultra-btn.red.active { background: #C7593F; border-color: #C7593F; }
+
+  .callout { background: var(--accent-soft); border-left: 3px solid var(--accent); padding: 16px 20px; border-radius: 4px; margin: 24px 0; font-size: 15px; }
+  .callout-warn { background: var(--warn-soft); border-left-color: var(--warn); }
+  .callout-gold { background: var(--gold-soft); border-left-color: var(--gold); }
+  .callout p { margin: 0 0 8px 0; }
+  .callout p:last-child { margin: 0; }
+
+  .task-types { margin-top: 16px; }
+  .task-type-row { display: grid; grid-template-columns: 28px 1fr 1.4fr; gap: 16px; padding: 14px 0; border-bottom: 1px solid var(--line); align-items: start; }
+  .task-type-row:last-child { border-bottom: none; }
+  .task-num { font-family: var(--mono); font-size: 12px; color: var(--ink-faint); padding-top: 2px; }
+  .task-type-name { font-family: var(--serif); font-size: 16px; font-weight: 500; }
+  .task-type-tools { font-size: 13px; color: var(--ink-soft); }
+  .tool-tag { display: inline-block; padding: 2px 8px; background: var(--bg-soft); border-radius: 4px; margin-right: 4px; margin-bottom: 4px; font-family: var(--mono); font-size: 11px; color: var(--ink); }
+
+  .rules { counter-reset: rule; margin-top: 16px; }
+  .rule-item { counter-increment: rule; padding: 16px 0 16px 48px; border-bottom: 1px solid var(--line); position: relative; }
+  .rule-item:before { content: counter(rule); position: absolute; left: 0; top: 16px; width: 32px; height: 32px; background: var(--ink); color: var(--bg); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: var(--serif); font-size: 14px; font-weight: 500; }
+  .rule-item:last-child { border-bottom: none; }
+  .rule-title { font-family: var(--serif); font-size: 18px; font-weight: 500; margin-bottom: 4px; }
+  .rule-body { font-size: 14px; color: var(--ink-soft); }
+  .rule-body p { font-size: 14px; margin: 0 0 10px 0; color: var(--ink-soft); }
+  .rule-body p:last-child { margin-bottom: 0; }
+  .rule-example { background: var(--bg-soft); border-radius: 6px; padding: 10px 14px; margin: 10px 0; font-size: 13px; line-height: 1.55; }
+  .rule-example .ex-label { font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink-faint); display: block; margin-bottom: 4px; font-weight: 500; }
+  .rule-example .ex-bad { color: var(--warn); font-weight: 500; }
+  .rule-example .ex-good { color: var(--accent); font-weight: 500; }
+  .rule-verb-table { display: grid; grid-template-columns: auto 1fr; gap: 8px 14px; margin: 10px 0; font-size: 13px; }
+  .rule-verb-name { font-family: var(--mono); font-size: 12px; color: var(--accent); font-weight: 500; padding-top: 2px; }
+  .rule-verb-meaning { color: var(--ink); }
+  .rule-verb-meaning em { color: var(--ink-soft); font-style: italic; }
+
+  .resources { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 16px; }
+  .resource { background: var(--bg-card); border: 1px solid var(--line); border-radius: 10px; padding: 18px 20px; text-decoration: none; color: var(--ink); display: block; transition: border-color 0.15s; }
+  .resource:hover { border-color: var(--accent); }
+  .resource-label { font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); margin-bottom: 6px; }
+  .resource-name { font-family: var(--serif); font-size: 16px; font-weight: 500; margin-bottom: 4px; }
+  .resource-desc { font-size: 13px; color: var(--ink-soft); line-height: 1.5; }
+
+  .papers-list { display: flex; flex-direction: column; gap: 12px; margin-top: 16px; }
+  .paper-card { background: var(--bg-card); border: 1px solid var(--line); border-radius: 12px; padding: 20px 24px; transition: all 0.2s; }
+  .paper-card.completed { border-left: 3px solid var(--accent); }
+  .paper-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; }
+  .paper-title { font-family: var(--serif); font-size: 19px; font-weight: 500; }
+  .paper-sitting { font-family: var(--mono); font-size: 11px; color: var(--ink-faint); text-transform: uppercase; letter-spacing: 0.1em; }
+  .paper-flavor { font-size: 13px; color: var(--ink-soft); margin-bottom: 12px; }
+  .paper-files { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+  .file-link { font-size: 12px; padding: 6px 10px; background: var(--bg-soft); border-radius: 6px; color: var(--ink); text-decoration: none; border: 1px solid transparent; font-family: var(--mono); transition: all 0.15s; }
+  .file-link:hover { border-color: var(--line-strong); background: var(--bg-card); }
+  .file-link.preseen { background: var(--gold-soft); }
+  .file-link.answer { background: var(--accent-soft); color: var(--accent); }
+  .paper-progress { display: flex; gap: 8px; align-items: center; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--line); font-size: 12px; color: var(--ink-soft); }
+  .paper-progress label { display: flex; gap: 6px; align-items: center; cursor: pointer; }
+  .paper-progress input { accent-color: var(--accent); cursor: pointer; }
+
+  .coap-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-top: 16px; }
+  .coap-field { background: var(--bg-card); border: 1px solid var(--line); border-radius: 10px; padding: 16px 18px; }
+  .coap-field label { font-family: var(--mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); display: block; margin-bottom: 8px; }
+  .coap-field textarea { width: 100%; min-height: 80px; border: none; background: transparent; font-family: var(--sans); font-size: 14px; color: var(--ink); resize: vertical; line-height: 1.5; }
+  .coap-field textarea:focus { outline: none; }
+
+  .checklist { margin-top: 16px; }
+  .checklist-item { display: flex; gap: 12px; align-items: flex-start; padding: 12px 14px; background: var(--bg-card); border: 1px solid var(--line); border-radius: 8px; margin-bottom: 6px; cursor: pointer; transition: border-color 0.15s; }
+  .checklist-item:hover { border-color: var(--line-strong); }
+  .checklist-item input { margin-top: 4px; accent-color: var(--accent); cursor: pointer; }
+  .checklist-item.checked .checklist-text { text-decoration: line-through; color: var(--ink-faint); }
+  .checklist-text { font-size: 14px; }
+
+  footer { margin-top: 100px; padding-top: 32px; border-top: 1px solid var(--line); font-size: 13px; color: var(--ink-faint); display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; }
+  .footer-actions { display: flex; gap: 8px; }
+  .reset-btn, .signout-btn { background: none; border: 1px solid var(--line-strong); border-radius: 6px; padding: 6px 12px; font-family: var(--sans); font-size: 12px; color: var(--ink-faint); cursor: pointer; transition: all 0.15s; }
+  .reset-btn:hover, .signout-btn:hover { color: var(--ink); border-color: var(--ink-soft); }
+  .signout-btn:hover { color: var(--warn); border-color: var(--warn); }
+
+  .progress-card { margin-top: 20px; padding: 14px; background: var(--bg-soft); border-radius: 10px; }
+  .progress-label { font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); margin-bottom: 8px; font-weight: 500; }
+  .progress-bar { height: 4px; background: var(--line); border-radius: 2px; overflow: hidden; margin-bottom: 8px; }
+  .progress-fill { height: 100%; background: var(--accent); transition: width 0.4s ease; }
+  .progress-text { font-size: 12px; color: var(--ink-soft); margin-bottom: 4px; }
+  .progress-sub { font-size: 11px; color: var(--ink-faint); font-family: var(--mono); }
+  .progress-celebrate { font-family: var(--serif); font-size: 13px; color: var(--accent); font-weight: 500; margin-top: 8px; font-style: italic; }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    .app { grid-template-columns: 1fr; }
+    .sidebar { position: relative; height: auto; border-right: none; border-bottom: 1px solid var(--line); padding: 16px 20px; overflow-y: visible; }
+    .main { padding: 32px 20px 80px; }
+    .hero { margin-bottom: 48px; }
+    .hero h1 { font-size: 38px; }
+    .countdown { grid-template-columns: 1fr 1fr; gap: 16px; padding: 18px; }
+    .ultra-grid, .resources, .coap-grid { grid-template-columns: 1fr; }
+    .phase-card { grid-template-columns: 1fr; gap: 12px; text-align: left; }
+    .phase-meta { text-align: left; }
+    .chapter-content { padding: 0 14px 16px 44px; }
+    .ist-clock { margin-bottom: 12px; }
+    .nav-group { margin-bottom: 16px; }
+    .progress-card { margin-top: 16px; }
+    section { margin-bottom: 60px; }
+    h2 { font-size: 30px; }
+    .menu-toggle { display: flex; }
+    .nav-groups { display: none; }
+    .nav-groups.open { display: block; margin-bottom: 16px; }
+  }
+
+  @media (max-width: 640px) {
+    body { font-size: 15px; }
+    .login-card { padding: 32px 24px; border-radius: 16px; }
+    .login-greeting { font-size: 36px; }
+    .login-sub { font-size: 14px; margin-bottom: 22px; }
+    .orb { filter: blur(50px); }
+    .orb-1 { width: 280px; height: 280px; }
+    .orb-2 { width: 220px; height: 220px; }
+    .orb-3 { width: 200px; height: 200px; }
+    .sidebar { padding: 14px 16px; }
+    .brand-mark { font-size: 17px; }
+    .main { padding: 24px 16px 60px; }
+    .hero { margin-bottom: 40px; }
+    .hero h1 { font-size: 30px; line-height: 1.1; }
+    .hero-sub { font-size: 16px; }
+    .greeting { margin-bottom: 12px; }
+    .countdown { padding: 14px 16px; gap: 10px; }
+    .countdown-num { font-size: 26px; }
+    .countdown-label { font-size: 10px; }
+    .countdown-date { font-size: 15px; }
+    h2 { font-size: 26px; line-height: 1.2; }
+    h3 { font-size: 19px; margin-top: 24px; }
+    .section-intro { font-size: 15px; }
+    section { margin-bottom: 50px; }
+    .main p, li { font-size: 14px; }
+    .task-type-row { grid-template-columns: 24px 1fr; gap: 10px; padding: 12px 0; }
+    .task-type-tools { grid-column: 2; margin-top: 6px; }
+    .rule-item { padding: 14px 0 14px 40px; }
+    .rule-item:before { width: 28px; height: 28px; font-size: 12px; top: 14px; }
+    .rule-title { font-size: 16px; }
+    .rule-body p, .rule-body { font-size: 13.5px; }
+    .rule-example { padding: 10px 12px; font-size: 12.5px; }
+    .rule-verb-table { grid-template-columns: 1fr; gap: 4px 0; }
+    .rule-verb-name { padding-top: 6px; }
+    .rule-verb-meaning { padding-bottom: 8px; border-bottom: 1px solid var(--line); margin-bottom: 4px; font-size: 13px; }
+    .rule-verb-meaning:last-child { border-bottom: none; }
+    .chapter-header { padding: 10px 12px; gap: 10px; }
+    .chapter-num { display: none; }
+    .chapter-title { font-size: 13.5px; }
+    .chapter-toggle { font-size: 10px; padding: 3px 6px; }
+    .chapter-content { padding: 0 12px 14px 40px; }
+    .chapter-content li { font-size: 13px; }
+    .chapter-content .key-line { font-size: 12.5px; padding: 8px 10px; }
+    .ultra-hero { padding: 22px 20px; }
+    .ultra-hero-title { font-size: 22px; }
+    .ultra-hero-body { font-size: 14px; }
+    .ultra-hero-btn { padding: 9px 14px; font-size: 13px; }
+    .paper-card { padding: 16px 18px; }
+    .paper-header { flex-direction: column; align-items: flex-start; gap: 4px; margin-bottom: 6px; }
+    .paper-title { font-size: 17px; }
+    .paper-files { gap: 5px; }
+    .file-link { font-size: 11px; padding: 5px 8px; }
+    .coap-field { padding: 14px 14px; }
+    .coap-field textarea { font-size: 13.5px; min-height: 70px; }
+    .checklist-item { padding: 10px 12px; gap: 10px; }
+    .checklist-text { font-size: 13.5px; }
+    .resource { padding: 16px 18px; }
+    .resource-name { font-size: 15px; }
+    .resource-desc { font-size: 12.5px; }
+    .callout { padding: 14px 16px; font-size: 14px; }
+    footer { flex-direction: column; gap: 12px; align-items: flex-start; margin-top: 60px; }
+  }
+
+  @media (max-width: 380px) {
+    .login-greeting { font-size: 30px; }
+    .hero h1 { font-size: 26px; }
+    .countdown { grid-template-columns: 1fr 1fr; gap: 8px; padding: 12px; }
+    .countdown-num { font-size: 22px; }
+    h2 { font-size: 23px; }
+    .main { padding: 20px 14px 56px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ANIMATED LOGIN SCREEN -->
+<div class="login-screen" id="loginScreen">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+
+  <button class="login-theme-toggle" onclick="toggleTheme()" title="Toggle theme" id="loginThemeToggle">
+    <svg id="loginThemeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+  </button>
+
+  <div class="login-card">
+    <div class="login-eyebrow">Maria Potti · Study Guide</div>
+    <h1 class="login-greeting">Hey, <em>chundari penne</em><span class="smile">:)</span></h1>
+    <p class="login-sub">Sign in to keep your study progress synced across all your devices.</p>
+
+    <form class="login-form" id="loginForm" onsubmit="handleLogin(event)">
+      <div class="login-field">
+        <label for="loginEmail">Email</label>
+        <input type="email" id="loginEmail" placeholder="you@example.com" autocomplete="email" required />
+      </div>
+      <div class="login-field">
+        <label for="loginPassword">Password</label>
+        <input type="password" id="loginPassword" placeholder="••••••••" autocomplete="current-password" required />
+      </div>
+      <button type="submit" class="login-btn" id="loginBtn">
+        <span class="spinner"></span>
+        <span class="btn-text">Sign in →</span>
+      </button>
+      <div class="login-error" id="loginError"></div>
+    </form>
+
+    <div class="login-footer">
+      <span>SBL exam · June 2nd</span>
+      <span class="countdown-mini" id="loginCountdown">— days</span>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN APP (hidden until logged in) -->
+<div class="app" id="appRoot" style="display:none;">
+  <aside class="sidebar">
+    <div class="brand-row">
+      <div class="brand"><span class="brand-mark">Maria Potti</span><span class="brand-dot"></span></div>
+      <div class="brand-actions">
+        <button class="theme-toggle" onclick="toggleTheme()" title="Toggle dark mode" id="themeToggle">
+          <svg id="themeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+        </button>
+        <button class="menu-toggle" onclick="toggleMenu()" title="Toggle menu" id="menuToggle">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+      </div>
+    </div>
+    <div class="brand-sub">Study Guide</div>
+
+    <div class="sync-status" id="syncStatus">
+      <span class="sync-dot"></span>
+      <span id="syncStatusText">Synced</span>
+    </div>
+
+    <div class="ist-clock">
+      <div class="ist-clock-label">India Standard Time</div>
+      <div class="ist-clock-time" id="istClockTime">—</div>
+      <div class="ist-clock-date" id="istClockDate">—</div>
+      <div class="ist-clock-days">
+        <span class="ist-clock-days-num" id="istClockDaysNum">—</span>
+        <span class="ist-clock-days-label">days till exam</span>
+      </div>
+    </div>
+
+    <div class="nav-groups" id="navGroups">
+      <div class="nav-group">
+        <div class="nav-label">Now</div>
+        <a class="nav-item active" href="#overview">Overview</a>
+        <a class="nav-item" href="#phase-1">Phase 1 · Skim</a>
+        <a class="nav-item" href="#chapters">22 chapters</a>
+      </div>
+      <div class="nav-group">
+        <div class="nav-label">Reference</div>
+        <a class="nav-item" href="#task-types">Task types</a>
+        <a class="nav-item" href="#non-negotiables">Non-negotiables</a>
+        <a class="nav-item" href="#resources">Resources</a>
+      </div>
+      <div class="nav-group">
+        <div class="nav-label">Phases</div>
+        <a class="nav-item" href="#phase-2">Phase 2 · Past papers</a>
+        <a class="nav-item" href="#phase-3">Phase 3 · Pre-seen</a>
+        <a class="nav-item" href="#phase-4">Phase 4 · Lock in</a>
+      </div>
+    </div>
+
+    <div class="progress-card" id="progressCard">
+      <div class="progress-label" id="progressTitle">Phase 1 progress</div>
+      <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+      <div class="progress-text" id="progressText">0%</div>
+      <div class="progress-sub" id="progressSub">0 of 47 done</div>
+      <div class="progress-celebrate" id="progressCelebrate" style="display:none;"></div>
+    </div>
+  </aside>
+
+  <main class="main">
+
+    <section class="hero" id="overview">
+      <div class="greeting">Hello, Penne.</div>
+      <h1>Pass SBL on <em>June 2nd</em>.<br>One day at a time.</h1>
+      <p class="hero-sub">A 34-day plan. No fluff, no panic. You already know the content from college — this is about training your reflexes for the exam's specific shape. Templates, time discipline, and a clear head.</p>
+
+      <div class="countdown" id="countdown">
+        <div>
+          <div class="countdown-label">Exam day · IST</div>
+          <div class="countdown-date" id="examDateDisplay">Tuesday, June 2</div>
+        </div>
+        <div class="countdown-stat"><div class="countdown-num" id="cdDays">—</div><div class="countdown-unit">Days</div></div>
+        <div class="countdown-stat"><div class="countdown-num" id="cdWeeks">—</div><div class="countdown-unit">Weeks</div></div>
+        <div class="countdown-stat"><div class="countdown-num" id="cdHours">—</div><div class="countdown-unit">Hours</div></div>
+      </div>
+    </section>
+
+    <section id="roadmap">
+      <div class="section-eyebrow">The roadmap</div>
+      <h2>Four phases. Drip-fed.</h2>
+      <p class="section-intro">Don't try to swallow the whole thing today. Each phase has its own materials and tools below.</p>
+
+      <div class="phases" id="phasesContainer">
+        <div class="phase-card" data-phase="1">
+          <div class="phase-num">01</div>
+          <div class="phase-content"><h4>Skim & diagnose</h4><p>Speed-pass through 22 chapters. Self-assess the Top 25 topics. Set up the CBE practice platform.</p></div>
+          <div class="phase-meta" data-phase-meta="1">Apr 29 – May 5<br><span class="phase-status status-active">Active</span></div>
+        </div>
+        <div class="phase-card" data-phase="2">
+          <div class="phase-num">02</div>
+          <div class="phase-content"><h4>Past paper bootcamp</h4><p>Drill 5 papers. Build templates for the 10 task types. Develop verb discipline and answer-shape muscle memory.</p></div>
+          <div class="phase-meta" data-phase-meta="2">May 6 – May 18<br><span class="phase-status status-locked">Starts May 6</span></div>
+        </div>
+        <div class="phase-card" data-phase="3">
+          <div class="phase-num">03</div>
+          <div class="phase-content"><h4>Pre-seen lockdown</h4><p>Pre-seen drops May 19. Build your "company on a page". Two full mocks on the CBE platform.</p></div>
+          <div class="phase-meta" data-phase-meta="3">May 19 – May 31<br><span class="phase-status status-locked">Starts May 19</span></div>
+        </div>
+        <div class="phase-card" data-phase="4">
+          <div class="phase-num">04</div>
+          <div class="phase-content"><h4>Lock in</h4><p>Final 48-hour protocol. Light revision, sleep, exam-day checklist.</p></div>
+          <div class="phase-meta" data-phase-meta="4">Jun 1 – Jun 2<br><span class="phase-status status-locked">Starts May 31</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="phase-1">
+      <div class="section-eyebrow">Phase 1 · Apr 29 – May 5</div>
+      <h2>Skim & diagnose.</h2>
+      <p class="section-intro">Goal: <strong>recognition, not mastery</strong>. Flick through fast enough that when "Mendelow" or "TARA" or "cultural web" shows up next week, your brain says "I've seen that." That's all you need from this week.</p>
+
+      <div class="callout">
+        <p><strong>Method per chapter — 20-30 min max.</strong> Click any chapter below to expand the cheat-sheet. Read it. Tick it. Move on. Skip the long worked examples in Kaplan. The TYU questions wait for next week.</p>
+      </div>
+
+      <h3>Top 25 topics — self-assessment</h3>
+      <p style="color: var(--ink-soft); font-size: 14px; margin-bottom: 16px;">After skimming a chapter, rate the related topics. <strong style="color:#4A8268;">Green</strong> = know cold · <strong style="color:#D9A441;">Yellow</strong> = vaguely remember · <strong style="color:#C7593F;">Red</strong> = don't know. The reds are where you spend Phase 2 prep time.</p>
+
+      <div class="ultra-grid" id="ultraList"></div>
+
+      <div class="callout callout-gold" style="margin-top: 32px;">
+        <p><strong>Also this week:</strong> Set up the ACCA Practice Platform at <a href="https://cbe.accaglobal.com" target="_blank" style="font-family: var(--mono); font-size: 13px; color: var(--accent);">cbe.accaglobal.com</a>. Spend 30 minutes clicking around the SBL specimen. Don't try to answer anything — just get the interface into your hands.</p>
+      </div>
+    </section>
+
+    <section id="chapters">
+      <div class="section-eyebrow">The 22 chapters</div>
+      <h2>The cheat-sheet.</h2>
+      <p class="section-intro">Every chapter explained in plain English. Models broken down. Click to expand. Tick when read.</p>
+
+      <div class="ultra-hero">
+        <div class="ultra-hero-eyebrow">⚡ Most important resource you have</div>
+        <h3 class="ultra-hero-title">Ultra Notes by Sir Hasan Dossani</h3>
+        <p class="ultra-hero-body">If you only had time to read <em>one</em> document, this is it. 96 pages, hand-curated to the 25 topics that actually get examined. The cheat-sheet below is a recognition aid — Ultra Notes is the real revision tool. <strong>Plan to read it cover-to-cover at least three times</strong> before exam day: end of Phase 1, before mocks in Phase 3, and final morning.</p>
+        <a href="./materials/ultra-notes.pdf" target="_blank" class="ultra-hero-btn">Open Ultra Notes →</a>
+      </div>
+
+      <div class="chapters" id="chaptersList"></div>
+    </section>
+
+    <section id="task-types">
+      <div class="section-eyebrow">Reference</div>
+      <h2>The 10 task types.</h2>
+      <p class="section-intro">Almost every SBL task ever set fits into one of these. <strong>Classify before you write.</strong> 60 seconds of identification saves 30 minutes of wandering.</p>
+
+      <div class="task-types">
+        <div class="task-type-row"><div class="task-num">01</div><div><div class="task-type-name">Strategic analysis / position</div></div><div class="task-type-tools"><span class="tool-tag">PESTEL</span><span class="tool-tag">5 Forces</span><span class="tool-tag">SWOT</span><span class="tool-tag">Value chain</span></div></div>
+        <div class="task-type-row"><div class="task-num">02</div><div><div class="task-type-name">Strategic options / choice</div></div><div class="task-type-tools"><span class="tool-tag">SAF</span><span class="tool-tag">Ansoff</span><span class="tool-tag">BCG</span></div></div>
+        <div class="task-type-row"><div class="task-num">03</div><div><div class="task-type-name">Performance / financial</div></div><div class="task-type-tools"><span class="tool-tag">Ratios</span><span class="tool-tag">NPV / IRR</span><span class="tool-tag">Sensitivity</span></div></div>
+        <div class="task-type-row"><div class="task-num">04</div><div><div class="task-type-name">Governance / board</div></div><div class="task-type-tools"><span class="tool-tag">Corp Gov Code</span><span class="tool-tag">NEDs</span><span class="tool-tag">Committees</span></div></div>
+        <div class="task-type-row"><div class="task-num">05</div><div><div class="task-type-name">Risk</div></div><div class="task-type-tools"><span class="tool-tag">TARA</span><span class="tool-tag">Risk register</span><span class="tool-tag">Risk appetite</span></div></div>
+        <div class="task-type-row"><div class="task-num">06</div><div><div class="task-type-name">Ethics</div></div><div class="task-type-tools"><span class="tool-tag">ACCA Code</span><span class="tool-tag">Tucker's 5</span><span class="tool-tag">AAA model</span></div></div>
+        <div class="task-type-row"><div class="task-num">07</div><div><div class="task-type-name">Stakeholders</div></div><div class="task-type-tools"><span class="tool-tag">Mendelow</span><span class="tool-tag">CSR</span></div></div>
+        <div class="task-type-row"><div class="task-num">08</div><div><div class="task-type-name">Change management</div></div><div class="task-type-tools"><span class="tool-tag">Lewin</span><span class="tool-tag">Kotter</span><span class="tool-tag">Cultural web</span><span class="tool-tag">Contextual features</span></div></div>
+        <div class="task-type-row"><div class="task-num">09</div><div><div class="task-type-name">Technology / IT</div></div><div class="task-type-tools"><span class="tool-tag">Big data</span><span class="tool-tag">Cyber</span><span class="tool-tag">E-marketing</span></div></div>
+        <div class="task-type-row"><div class="task-num">10</div><div><div class="task-type-name">Project management</div></div><div class="task-type-tools"><span class="tool-tag">PID</span><span class="tool-tag">Business case</span><span class="tool-tag">Sponsor vs Mgr</span></div></div>
+      </div>
+    </section>
+
+    <section id="non-negotiables">
+      <div class="section-eyebrow">Reference</div>
+      <h2>The non-negotiables.</h2>
+      <p class="section-intro">Read these every weekend. Most students fail SBL not because they don't know the content — they fail because they break one of these six rules.</p>
+
+      <div class="rules">
+
+        <div class="rule-item">
+          <div class="rule-title">Format header on every answer</div>
+          <div class="rule-body">
+            <p>SBL answers aren't essays. The examiner expects a real-world business document — a report to the board, an email to a manager, a briefing note for a partner. The first 30 seconds of every answer should set up that document with a header.</p>
+            <p>The 4 standard formats: <strong>REPORT</strong> (formal, board-level), <strong>EMAIL</strong> (faster, internal), <strong>MEMO</strong> (informal internal), <strong>BRIEFING NOTES</strong> (talking points). Always include TO / FROM / SUBJECT / DATE.</p>
+            <div class="rule-example">
+              <span class="ex-label">Example — top of an exam answer</span>
+              REPORT<br>
+              TO: Board of Directors<br>
+              FROM: External Consultant<br>
+              SUBJECT: Evaluation of the proposed acquisition of Ciplus Ltd<br>
+              DATE: [Exam date]
+            </div>
+            <p>Why it matters: this earns Communication marks before you've written a single technical point. Skipping it costs 2-3 professional skills marks every single time.</p>
+          </div>
+        </div>
+
+        <div class="rule-item">
+          <div class="rule-title">Headings inside the answer</div>
+          <div class="rule-body">
+            <p>Examiners spend roughly 5 minutes marking each answer. They scan, they don't read deeply. If your structure isn't obvious from the headings alone, they will miss your points — and unmarked points are unscored points.</p>
+            <p>Use the requirement itself to generate your headings. If the question asks "evaluate the proposed strategy and recommend whether to proceed", your headings should be:</p>
+            <div class="rule-example">
+              <span class="ex-label">Heading skeleton</span>
+              <strong>1. Suitability of the proposed strategy</strong><br>
+              <strong>2. Acceptability — financial and stakeholder considerations</strong><br>
+              <strong>3. Feasibility — resources required</strong><br>
+              <strong>4. Conclusion and recommendation</strong>
+            </div>
+            <p>Each heading should map to either a part of the requirement or a logical step in your framework. The marker can navigate your answer in 10 seconds.</p>
+          </div>
+        </div>
+
+        <div class="rule-item">
+          <div class="rule-title">Bullets and short paragraphs</div>
+          <div class="rule-body">
+            <p>SBL is not academic writing. Long flowing paragraphs hide your points. Examiners awarding marks per bullet can't find them inside a wall of text.</p>
+            <p>The rule: <strong>no paragraph over 4 lines. Bullet anything that's a list.</strong> If you find yourself writing "firstly... secondly... thirdly...", convert to bullets immediately.</p>
+            <div class="rule-example">
+              <span class="ex-label">Bad — wall of text (1 mark)</span>
+              <span class="ex-bad">The risks of this proposal include cost overruns due to inflation, delays from the planning approval process which has been slow in the region, currency exposure given the EUR-denominated supplier contract, and reputational damage if the project fails publicly.</span>
+            </div>
+            <div class="rule-example">
+              <span class="ex-label">Good — bulleted (4 marks)</span>
+              <span class="ex-good">Risks include:<br>
+              • Cost overruns from rising inflation<br>
+              • Delays from slow regional planning approval<br>
+              • Currency exposure on the EUR supplier contract<br>
+              • Reputational damage if the project fails publicly</span>
+            </div>
+            <p>Same content, four times the marks. Every time.</p>
+          </div>
+        </div>
+
+        <div class="rule-item">
+          <div class="rule-title">Obey the verb (the most important rule)</div>
+          <div class="rule-body">
+            <p>Every SBL requirement begins with a verb. That verb tells you exactly what kind of answer the marker is looking for. <strong>If you misread the verb, you can write a brilliant answer and still fail the question</strong> — because you didn't answer what was asked.</p>
+            <p>Read the verb twice. Underline it. Plan your answer around it. Here are the most common verbs and what they actually demand:</p>
+
+            <div class="rule-verb-table">
+              <div class="rule-verb-name">Evaluate</div>
+              <div class="rule-verb-meaning">Give both sides AND a clear judgement at the end. Pros + cons + your verdict. <em>Missing the judgement = no Evaluation marks.</em></div>
+
+              <div class="rule-verb-name">Discuss</div>
+              <div class="rule-verb-meaning">Present arguments on both sides. Doesn't always require a final verdict — exploration is enough. <em>Two-sided is essential.</em></div>
+
+              <div class="rule-verb-name">Recommend</div>
+              <div class="rule-verb-meaning">Tell them what to <em>do</em>, in order, with reasons. Bullet points starting with verbs ("Appoint a NED…", "Restructure the board…"). <em>Vague suggestions = no marks.</em></div>
+
+              <div class="rule-verb-name">Analyse</div>
+              <div class="rule-verb-meaning">Break it into parts and explain how they connect. Use a framework (PESTEL, 5 Forces, Value Chain). <em>Don't just describe — show cause and effect.</em></div>
+
+              <div class="rule-verb-name">Explain</div>
+              <div class="rule-verb-meaning">Make it understandable. State what + why + how. <em>Lower-level than analyse — definitions matter here.</em></div>
+
+              <div class="rule-verb-name">Assess</div>
+              <div class="rule-verb-meaning">Almost identical to evaluate — both sides, then a judgement. Treat them the same way.</div>
+
+              <div class="rule-verb-name">Compare</div>
+              <div class="rule-verb-meaning">Set out similarities AND differences. <em>One-sided contrast = wrong answer.</em></div>
+
+              <div class="rule-verb-name">Critically evaluate</div>
+              <div class="rule-verb-meaning">Like evaluate, but with extra Scepticism. Question assumptions, challenge claims, look for what's missing.</div>
+            </div>
+
+            <div class="rule-example">
+              <span class="ex-label">Common trap</span>
+              Question: <strong>"Evaluate</strong> the proposed acquisition."<br>
+              <span class="ex-bad">Bad answer:</span> A four-page list of pros only. No cons. No verdict. <em>→ minimal marks.</em><br>
+              <span class="ex-good">Good answer:</span> Pros (3-4 points). Cons (3-4 points). Concluding paragraph: <em>"On balance, the acquisition should not proceed because [reason]."</em>
+            </div>
+
+            <p><strong>The fix:</strong> before writing a single word, write the verb at the top of your scratchpad. Make sure your structure delivers what that verb demands. This single habit lifts most students from a fail to a pass.</p>
+          </div>
+        </div>
+
+        <div class="rule-item">
+          <div class="rule-title">Don't repeat — one point, one mark</div>
+          <div class="rule-body">
+            <p>Each distinct technical point earns marks <em>once</em>. Saying the same thing in three different ways earns one mark, not three. Examiners are trained to spot repetition and skip it.</p>
+            <div class="rule-example">
+              <span class="ex-label">Repetition trap</span>
+              <span class="ex-bad">"The CEO has too much power. The CEO is too dominant. The CEO holds excessive authority over the board."</span> → 1 mark.<br><br>
+              <span class="ex-good">"The CEO has too much power, evidenced by chairing both the board and the audit committee — a clear breach of the UK Corporate Governance Code's principle on division of responsibilities."</span> → 2-3 marks.
+            </div>
+            <p>The fix: when you've made a point, move on. If you have time at the end, add a <em>new</em> point — don't restate an old one.</p>
+          </div>
+        </div>
+
+        <div class="rule-item">
+          <div class="rule-title">Time discipline — 1.95 mins per mark</div>
+          <div class="rule-body">
+            <p>The exam runs <strong>3 hours 15 minutes for 100 marks</strong>. That's 1.95 minutes per mark. The single biggest reason students fail SBL is running out of time on Task 3 because they overwrote Task 1.</p>
+            <p>The math you should burn into your brain:</p>
+            <div class="rule-example">
+              <span class="ex-label">Time budget per mark</span>
+              <strong>4 marks</strong> → 8 minutes max<br>
+              <strong>10 marks</strong> → 20 minutes max<br>
+              <strong>16 marks</strong> → 31 minutes max<br>
+              <strong>20 marks</strong> → 39 minutes max
+            </div>
+            <p><strong>The hard rule:</strong> when time's up on a sub-task, stop. Move on. A half-finished Task 3 loses more marks than a slightly-less-perfect Task 1.</p>
+            <p>Set timer milestones in your head before you start: "I'll be on Task 2 by 60 minutes. Task 3 by 130 minutes. Submit by 195." If you're behind those targets, ruthlessly cut what you're writing and move forward.</p>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="callout callout-warn">
+        <p><strong>The exam runs one task at a time.</strong> You can't see all three on screen together. Commit your time budget per task <em>before</em> you start.</p>
+      </div>
+    </section>
+
+    <section id="resources">
+      <div class="section-eyebrow">Reference</div>
+      <h2>The kit.</h2>
+      <p class="section-intro">Three resources, one kit. Click to open.</p>
+
+      <div class="resources">
+        <a class="resource" href="./materials/kaplan-study-text.pdf" target="_blank">
+          <div class="resource-label">Teaching</div>
+          <div class="resource-name">Kaplan SBL Study Text 2025–26 →</div>
+          <div class="resource-desc">22 chapters, full syllabus. For deep-dive into weak topics. The cheat-sheet above gets you 80% — this gets you the last 20%.</div>
+        </a>
+        <a class="resource" href="./materials/ultra-notes.pdf" target="_blank">
+          <div class="resource-label">⚡ Most important</div>
+          <div class="resource-name">Ultra Notes — Top 25 Topics →</div>
+          <div class="resource-desc">Sir Hasan Dossani. 96 pages, pre-curated to what's actually examined. Read cover-to-cover at least 3 times before the exam. This is your single highest-leverage resource.</div>
+        </a>
+        <a class="resource" href="https://cbe.accaglobal.com" target="_blank">
+          <div class="resource-label">Practice</div>
+          <div class="resource-name">ACCA CBE Practice Platform →</div>
+          <div class="resource-desc">Real exam interface. Free with student account. At least one full mock here in Phase 3.</div>
+        </a>
+        <div class="resource" style="cursor: default;">
+          <div class="resource-label">Modelling</div>
+          <div class="resource-name">5 Past Papers</div>
+          <div class="resource-desc">Available below in Phase 2 — pre-seen + 4 exhibits + Sir Hasan's drafted answer per paper.</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="phase-2">
+      <div class="section-eyebrow">Phase 2 · May 6 – May 18</div>
+      <h2>Past paper bootcamp.</h2>
+      <p class="section-intro">Five papers, all post-Sept 2023 format. Roughly 2.5 days per paper. Read the pre-seen first, attempt tasks under timed conditions on the CBE platform, then mark against Sir Hasan's draft.</p>
+
+      <div class="callout">
+        <p><strong>The drill per paper:</strong></p>
+        <p>1. Read the pre-seen (1-2 hours, treat it like the real thing)<br>
+        2. Open the 4 exhibits, attempt the tasks under timed conditions in the CBE practice platform's blank workspace<br>
+        3. Compare your answer to Sir Hasan's draft. Note 3 weaknesses.<br>
+        4. Re-read Ultra Notes for those 3 weaknesses before moving to next paper.</p>
+      </div>
+
+      <div class="papers-list" id="papersList"></div>
+    </section>
+
+    <section id="phase-3">
+      <div class="section-eyebrow">Phase 3 · May 19 – May 31</div>
+      <h2>Pre-seen lockdown.</h2>
+      <p class="section-intro">When the pre-seen drops May 19, everything else stops. Read it twice — once passively, once analytically. Then fill in the worksheet below. This becomes your reference card right up to exam morning.</p>
+
+      <div class="callout">
+        <p><strong>Save your pre-seen PDF</strong> in your <span style="font-family: var(--mono); font-size: 13px;">materials/</span> folder as <span style="font-family: var(--mono); font-size: 13px;">my-preseen.pdf</span> and it'll be linked here:</p>
+        <p style="margin-top: 8px;"><a href="./materials/my-preseen.pdf" target="_blank" class="file-link preseen">📄 Open my pre-seen</a></p>
+      </div>
+
+      <h3>Company on a page</h3>
+      <p style="color: var(--ink-soft); font-size: 14px; margin-bottom: 16px;">Fill these in as you analyse the pre-seen. All entries save automatically and sync across devices.</p>
+
+      <div class="coap-grid" id="coapGrid"></div>
+
+      <h3 style="margin-top: 32px;">Mock schedule</h3>
+      <p style="color: var(--ink-soft); font-size: 14px;">Two full mocks under exam conditions on the CBE practice platform. Mark brutally against the model answer. Don't skip the marking — that's where the learning happens.</p>
+
+      <div class="checklist" id="mockChecklist"></div>
+    </section>
+
+    <section id="phase-4">
+      <div class="section-eyebrow">Phase 4 · Jun 1 – Jun 2</div>
+      <h2>Lock in.</h2>
+      <p class="section-intro">The final 48 hours. The plan now is to <em>not</em> learn anything new. Consolidate, rest, lock in.</p>
+
+      <h3>The 48-hour protocol</h3>
+      <div class="checklist" id="finalChecklist"></div>
+
+      <h3 style="margin-top: 32px;">Exam morning checklist</h3>
+      <div class="checklist" id="morningChecklist"></div>
+
+      <div class="callout callout-gold" style="margin-top: 32px;">
+        <p><strong>The mantra for exam day:</strong></p>
+        <p style="margin-top: 8px;">1. Classify the task before writing.<br>
+        2. Format header on every answer.<br>
+        3. Obey the verb.<br>
+        4. Move on when time's up.</p>
+        <p style="margin-top: 8px;">You've done the work. Trust it.</p>
+      </div>
+    </section>
+
+    <footer>
+      <div>Built for Penne. Trust the plan.</div>
+      <div class="footer-actions">
+        <button class="reset-btn" onclick="resetAll()">Reset progress</button>
+        <button class="signout-btn" onclick="signOut()">Sign out</button>
+      </div>
+    </footer>
+  </main>
+</div>
+
+<script>
+  // === SUPABASE CONFIG ===
+  const SUPABASE_URL = 'https://ssikcjcpeedpwlzybtck.supabase.co';
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNzaWtjamNwZWVkcHdsenlidGNrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc0ODY4MTMsImV4cCI6MjA5MzA2MjgxM30.YO-vpnT3njtC0dH67m1IoFPHEcnleQHuZOg_sYF1Ctw';
+  const ALLOWED_EMAIL = 'mariarodrix065@gmail.com';
+  const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  // === CONTENT DATA ===
+  const CHAPTERS = [
+    { title: "Introduction to the strategic business leader", summary: "What SBL actually is — not a knowledge test, an application test. You're a consultant or director walking into a real business. Examiner wants to see judgement.", points: [{ name: "Format", detail: "3 hours 15 mins, 3 tasks, 100 marks (80 technical + 20 professional skills). One task on screen at a time." },{ name: "Time", detail: "1.95 mins per mark. Read + plan + write fits in this. Don't over-write." },{ name: "5 professional skills", detail: "Communication, Commercial Acumen, Analysis, Scepticism, Evaluation. Each worth 4 marks. They're earned through HOW you write, not extra content." },{ name: "Verbs matter", detail: "Evaluate = balanced judgement. Discuss = both sides. Recommend = actionable advice." }], key: "SBL is structured thinking under time pressure. Templates + facts + format = pass." },
+    { title: "Concepts of strategy", summary: "Strategy = long-term direction. The exam expects you to know the basics: mission, vision, objectives, levels.", points: [{ name: "Levels of strategy", detail: "Corporate (whole organisation), Business (individual units), Functional (departments). Tasks usually sit at corporate or business level." },{ name: "Mission vs Vision", detail: "Mission = what we do now. Vision = what we want to become." },{ name: "Objectives", detail: "SMART. Should cascade from mission down to functional level." },{ name: "Rational vs Emergent", detail: "Rational = planned, top-down. Emergent = strategy forms organically. Modern view: both happen." }], key: "Foundation chapter. Don't memorise definitions — understand the hierarchy." },
+    { title: "Strategic analysis", summary: "The diagnostic toolkit. Used in almost every Task 1. Apply 2-3 frameworks per analysis question, never just one.", points: [{ name: "PESTEL", detail: "External macro factors: Political, Economic, Social, Technological, Environmental, Legal. Use to scan the wider environment." },{ name: "Porter's 5 Forces", detail: "Industry attractiveness: Rivalry, New entrants, Substitutes, Supplier power, Buyer power. High pressure on all 5 = unattractive industry." },{ name: "SWOT (and TOWS)", detail: "Internal: Strengths, Weaknesses. External: Opportunities, Threats. TOWS uses pairs to generate strategies (S+O, W+O, S+T, W+T)." },{ name: "Value chain", detail: "Primary activities: inbound logistics, operations, outbound logistics, marketing/sales, service. Support: infrastructure, HR, tech, procurement. Find where value is added or lost." },{ name: "Resource audit (M's)", detail: "Money, Manpower, Machinery, Materials, Markets, Methods, Management. A quick capability check." }], key: "When asked to analyse — pick 2-3 frameworks based on the scenario, apply with the company's actual facts, then conclude." },
+    { title: "Performance analysis", summary: "Beyond financials. SBL wants holistic performance — financial AND non-financial. Compare against goals, competitors, prior years.", points: [{ name: "KPIs", detail: "Key Performance Indicators. Should link to objectives. Mix lagging (financial) and leading (operational) indicators." },{ name: "Balanced scorecard", detail: "Four perspectives: Financial, Customer, Internal Process, Learning & Growth. Forces a holistic view." },{ name: "Benchmarking", detail: "Compare performance against: internal divisions, competitors, industry leaders, or world-class organisations." },{ name: "Gap analysis", detail: "Where are we vs where do we want to be? The gap reveals strategic priorities." }], key: "If a task asks about performance, never give only ratios. Mix financial + non-financial + comparison." },
+    { title: "Strategic choice", summary: "Once you know the situation, what should they DO? This chapter lists the options and the test for picking one.", points: [{ name: "Porter's generic strategies", detail: "Cost leadership, Differentiation, Focus (cost or differentiation). Stuck-in-the-middle = bad." },{ name: "Ansoff's matrix", detail: "Market penetration (existing product, existing market = lowest risk), Market development (existing product, new market), Product development (new product, existing market), Diversification (new + new = highest risk)." },{ name: "BCG matrix", detail: "Plot products on Market Growth × Market Share. Stars (high/high), Cash Cows (low/high), Question Marks (high/low), Dogs (low/low). Used heavily in Beago." },{ name: "SAF Framework", detail: "Suitability (does it fit the situation?), Acceptability (will stakeholders buy in? risk/return acceptable?), Feasibility (do we have the resources?). The most-used model in evaluation tasks." }], key: "When evaluating a strategy, walk through SAF. When recommending one, use Ansoff or Porter to frame the choice." },
+    { title: "Methods of strategic development", summary: "Once you've chosen WHAT, this chapter is about HOW. Internal vs external growth.", points: [{ name: "Organic (internal) growth", detail: "Build it yourself. Slower, lower risk, retains control. Used when you have core competencies to leverage." },{ name: "Mergers & acquisitions", detail: "Buy capability fast. Risks: cultural fit, integration cost, premium paid. Synergies often overestimated." },{ name: "Strategic alliances / JVs", detail: "Share resources without buying. Reduces risk but reduces control. Good for entering new markets or sharing R&D." },{ name: "Franchising / licensing", detail: "Use someone else's name or IP. Fast geographic expansion, low capital required." },{ name: "Divestment", detail: "Sometimes the best strategy is to sell or close a unit. Frees capital, focuses the business." }], key: "M&A is sexy in textbooks, expensive in reality. SBL examiners often expect you to push back on M&A proposals." },
+    { title: "Governance", summary: "The structures that keep an organisation honest. Corporate Governance Code is the backbone — know its principles.", points: [{ name: "Agency theory", detail: "Owners (principals) hire managers (agents). Their interests can diverge. Governance exists to align them." },{ name: "UK Corporate Governance Code", detail: "Comply or explain. Five sections: Board Leadership & Purpose, Division of Responsibilities, Composition/Succession/Evaluation, Audit/Risk/Internal Control, Remuneration." },{ name: "Rules-based vs principles-based", detail: "US (SOX) is rules-based — strict and prescriptive. UK is principles-based — flexible, comply or explain." },{ name: "Family-owned vs listed", detail: "Family firms have different agency dynamics. Going public introduces new governance demands. Examined in Corjetz." }], key: "Governance questions reward you for citing specific code principles, not generic 'good governance' waffle." },
+    { title: "The board of directors", summary: "Who's on the board, what they do, and the safeguards built into board structure.", points: [{ name: "Chairman vs CEO", detail: "Should be different people. Chairman runs the board. CEO runs the company. Combining = power concentration risk." },{ name: "NEDs (Non-Executive Directors)", detail: "Independent of management. Provide oversight, challenge, external perspective. Listed companies need a balance — typically half the board." },{ name: "Sub-committees (4 key)", detail: "Audit Committee (reviews financial reporting + auditors), Remuneration Committee (sets exec pay), Nominations Committee (board appointments), Risk Committee (oversight of risk management)." },{ name: "Director duties", detail: "Act in the company's best interests, exercise reasonable skill and care, avoid conflicts of interest, declare interests in transactions." }], key: "When a scenario describes a poor governance setup (CEO also Chair, no NEDs, no audit committee), name the missing structure AND say what damage results." },
+    { title: "Stakeholders & corporate social responsibility", summary: "Beyond shareholders. CSR isn't optional anymore — it's strategic risk.", points: [{ name: "Mendelow's matrix", detail: "Plot stakeholders on Power × Interest. High power + high interest = Key Players (manage closely). High power + low interest = Keep Satisfied. Low power + high interest = Keep Informed. Low power + low interest = Minimal Effort." },{ name: "Stakeholder types", detail: "Internal (employees, mgmt), Connected (shareholders, customers, suppliers), External (govt, community, regulators)." },{ name: "CSR strategies", detail: "Reactive (do nothing), Defensive (do minimum), Accommodative (do what's required), Proactive (lead the way)." },{ name: "Triple Bottom Line", detail: "Profit, People, Planet. Increasingly examined alongside financial performance." }], key: "Mendelow is a near-guaranteed exam tool. When asked about stakeholders, plot them on the matrix and recommend treatment per quadrant." },
+    { title: "Effective leadership", summary: "Leadership styles, traits, and what good leadership looks like in different situations.", points: [{ name: "Transactional vs Transformational", detail: "Transactional = reward/punish, manage tasks. Transformational = inspire, change culture, vision-led." },{ name: "Leadership styles", detail: "Autocratic (top-down), Democratic (consultative), Laissez-faire (hands-off). No single best style — depends on situation, people, urgency." },{ name: "Situational leadership (Hersey-Blanchard)", detail: "Match style to follower readiness: Telling, Selling, Participating, Delegating." },{ name: "Qualities for change", detail: "Communicating vision, empowering others, modelling behaviour, building coalition, removing obstacles." }], key: "If asked about leadership for a specific scenario, recommend a style that fits the people, context, and stakes — not a generic 'best' style." },
+    { title: "Reporting to stakeholders", summary: "How organisations communicate value and impact. Integrated Reporting and sustainability reporting are growing exam topics.", points: [{ name: "Integrated Reporting (IR)", detail: "Combines financial and non-financial info. Built around the 6 Capitals: Financial, Manufactured, Intellectual, Human, Social & Relationship, Natural. Tells the value-creation story." },{ name: "Sustainability reporting", detail: "GRI standards. Reporting on ESG (Environmental, Social, Governance) impacts." },{ name: "Why it matters strategically", detail: "Investors increasingly demand non-financial disclosure. Poor reporting = capital flight. Good reporting = trust." }], key: "Know the 6 Capitals — they pop up regularly. Integrated Reporting is the modern answer to 'how do we report holistically?'" },
+    { title: "Internal control systems", summary: "Controls prevent and detect things going wrong. COSO framework is the standard.", points: [{ name: "COSO components", detail: "Control Environment (tone at top), Risk Assessment, Control Activities, Information & Communication, Monitoring." },{ name: "Types of controls", detail: "Preventive (stop it happening), Detective (catch it after), Corrective (fix the impact). Mix of all three is healthy." },{ name: "Limitations", detail: "No system is perfect. Collusion, management override, cost-benefit limits, human error." }], key: "If asked to evaluate controls, list specific types (segregation of duties, approval limits, reconciliations) — not vague 'have controls'." },
+    { title: "Audit & compliance", summary: "Internal audit, external audit, and the audit committee. Big in governance-heavy papers like PVS.", points: [{ name: "Internal audit", detail: "Reports to audit committee. Independent of operations. Reviews controls, processes, risk management. Should be unrestricted in scope." },{ name: "External audit", detail: "Statutory. Gives independent opinion on financial statements. Cannot also do consulting work for the same client (independence)." },{ name: "Audit committee role", detail: "Reviews financial statements before publication. Recommends external auditor. Oversees internal audit. Made up of NEDs." },{ name: "Compliance", detail: "Following laws, regulations, and the company's own policies. Compliance officer reports to audit committee or board." }], key: "When ethics/audit/governance issues arise in a scenario, the audit committee is usually the right escalation point." },
+    { title: "Risk management", summary: "Identifying, assessing, and treating risk. TARA is the most-used framework. Heavily examined.", points: [{ name: "Risk types", detail: "Strategic, operational, financial, compliance, reputational, hazard. Different categories suggest different controls." },{ name: "TARA — risk responses", detail: "Transfer (insurance, outsourcing), Avoid (don't do the activity), Reduce (controls, mitigation), Accept (do nothing — appropriate when risk is low or cost-benefit doesn't justify action)." },{ name: "Risk appetite vs tolerance", detail: "Appetite = how much risk we want to take. Tolerance = how much we can bear. Appetite drives strategy; tolerance is the safety limit." },{ name: "Risk register / heat map", detail: "List of risks with likelihood × impact. Heat map visualises priority. High likelihood + high impact = top priority." }], key: "Risk questions almost always want TARA. Match each identified risk to the most appropriate response." },
+    { title: "Professionalism & ethics", summary: "ACCA Code of Ethics + decision frameworks. Examined in nearly every paper.", points: [{ name: "5 fundamental principles (ACCA)", detail: "Integrity, Objectivity, Professional Competence & Due Care, Confidentiality, Professional Behaviour." },{ name: "Threats to objectivity", detail: "Self-interest, Self-review, Advocacy, Familiarity, Intimidation. Each needs a specific safeguard." },{ name: "Tucker's 5 questions", detail: "Is it Profitable? Legal? Fair? Right? Sustainable? A simple ethical sniff-test." },{ name: "AAA model", detail: "Awareness (recognise the issue) → Analysis (consider stakeholders, options) → Action (decide and act). For more complex ethical decisions." },{ name: "Public interest", detail: "Accountants serve more than the client — society too. The qualification depends on this trust." }], key: "When ethics arises, name the principle threatened, identify the threat type, recommend a safeguard. That's the formula." },
+    { title: "Organising for success", summary: "How structure, processes, and people fit together. Mintzberg is the classic framework.", points: [{ name: "Mintzberg's structures", detail: "Simple (small, founder-led), Machine bureaucracy (large, formal, e.g. govt), Professional bureaucracy (universities, hospitals), Divisionalised (multi-product), Adhocracy (project-based, innovative)." },{ name: "Business processes", detail: "Sequence of activities that create value. Can be re-engineered (BPR) when broken." },{ name: "Outsourcing", detail: "Move non-core activities outside. Pros: cost, focus, expertise. Cons: control, dependency, IP risk." },{ name: "Centralisation vs decentralisation", detail: "Centralised = consistency, control. Decentralised = speed, local responsiveness. Match to strategy." }], key: "When asked about structure, link it to strategy — different structures suit different competitive positions." },
+    { title: "Technology in business", summary: "Disruptive technologies + cyber risk. Increasingly examined. NCTech entire paper was on this.", points: [{ name: "Big data — the 3Vs", detail: "Volume (huge datasets), Velocity (speed of generation), Variety (structured + unstructured). Some add Veracity (quality) and Value." },{ name: "AI & machine learning", detail: "Strategic uses: prediction, automation, personalisation. Risks: bias, explainability, job displacement." },{ name: "Cloud computing", detail: "IaaS, PaaS, SaaS. Pros: scalability, lower upfront cost. Cons: vendor lock-in, data location/sovereignty." },{ name: "Cyber security", detail: "Threats: malware, phishing, DDoS, insider threats. Controls: firewalls, encryption, access control, training, incident response plans. Examined in NCTech." },{ name: "Disruptive tech", detail: "Fintech, blockchain, IoT, robotics. Strategic question = how do we respond, not just what is it." }], key: "Tech tasks reward specific risk + specific control pairings. Generic 'cybersecurity is important' = no marks." },
+    { title: "E-marketing", summary: "Digital marketing fundamentals. Often a sub-task in technology-heavy papers.", points: [{ name: "6 I's", detail: "Interactivity, Intelligence (data), Individualisation, Integration, Independence of location, Industry restructuring." },{ name: "Digital marketing mix", detail: "Same 4 P's (Product, Price, Place, Promotion) but adapted to digital. Add Process, People, Physical evidence for services." },{ name: "SEO & SEM", detail: "Search Engine Optimisation (organic) vs Search Engine Marketing (paid). Long-term vs short-term." },{ name: "Social media marketing", detail: "Pros: reach, targeting, engagement. Risks: viral negative content, brand voice control." }], key: "If e-marketing is asked, structure with 6 I's or 4 P's — don't ramble. Examined in Historic Places." },
+    { title: "Project management", summary: "Projects need governance too. PID, business case, sponsor vs manager roles.", points: [{ name: "Project lifecycle", detail: "Initiation → Planning → Execution → Monitoring → Closure. Each gate has go/no-go decisions." },{ name: "PID (Project Initiation Document)", detail: "Defines: scope, objectives, deliverables, stakeholders, risks, costs, timeline. Foundation of any project." },{ name: "Business case", detail: "Justifies the project. Costs, benefits (financial + strategic), risks, alternatives. Reviewed at gates." },{ name: "Sponsor vs Manager", detail: "Sponsor = senior, accountable for benefits, secures resources, removes barriers. Manager = day-to-day delivery, manages team, reports to sponsor. Different roles." },{ name: "PRINCE2", detail: "Process-based methodology. Stage gates, defined roles, business case-driven. Common SBL reference." }], key: "If a project is failing, ask: is the sponsor doing their job? Is the business case being revisited? Is there a clear PID?" },
+    { title: "Financial decision making", summary: "Investment appraisal + sources of finance. Numerical work appears in roughly half of SBL papers.", points: [{ name: "Investment appraisal — 4 methods", detail: "NPV (best — accounts for time value of money), IRR (rate where NPV = 0), Payback (simple but ignores time value), ARR (accounting return). NPV is gold standard." },{ name: "Financial projections — check 5 things", detail: "1) DCF / NPV, 2) Payback, 3) Assumptions (are they realistic?), 4) Tax implications, 5) Sensitivity analysis. This is Sir Hasan's go-to structure." },{ name: "Sources of finance", detail: "Internal (retained earnings), Equity (shares), Debt (loans, bonds). Each has cost, risk, control implications." },{ name: "Cost of capital (WACC)", detail: "Weighted average of debt and equity costs. The hurdle rate for projects. Higher risk = higher WACC." },{ name: "Capital structure", detail: "Mix of debt and equity. More debt = cheaper but riskier. Optimal mix balances risk and return." }], key: "When evaluating a financial proposal, walk through the 5 checks. Always question the assumptions — that's a Scepticism marks move." },
+    { title: "Managing strategic change", summary: "Change management is everywhere — often forms a whole task. Multiple frameworks. Know them all.", points: [{ name: "Lewin's model", detail: "Unfreeze (create dissatisfaction with status quo) → Change (implement new ways) → Refreeze (embed). Simple but timeless." },{ name: "Kotter's 8 steps", detail: "1) Urgency, 2) Coalition, 3) Vision, 4) Communicate vision, 5) Empower action, 6) Short-term wins, 7) Build on change, 8) Anchor in culture." },{ name: "Force field analysis", detail: "Driving forces vs resisting forces. Strengthen drivers, weaken resistors." },{ name: "Cultural web (Johnson & Scholes)", detail: "6 elements that hold culture in place: Stories, Symbols, Power, Org Structure, Control Systems, Rituals & Routines. To change culture, change the web." },{ name: "Contextual features (Balogun & Hope Hailey)", detail: "Time, Scope, Preservation, Diversity, Capability, Capacity, Readiness, Power. Used in Historic Places." },{ name: "Types of change", detail: "Adaptation (incremental, same paradigm), Reconstruction (rapid, same paradigm), Evolution (incremental, new paradigm), Revolution (rapid, new paradigm)." }], key: "Change tasks usually want a contextual analysis (Balogun's 8 features) PLUS a model (Kotter or Lewin). Combine." },
+    { title: "Other employability & digital skills", summary: "The professional skills chapter. Already woven through this whole guide. Read Chapter 1's marking guides for Communication, Analysis, Scepticism, Evaluation, Commercial Acumen.", points: [{ name: "Data analytics", detail: "Descriptive (what happened), Diagnostic (why), Predictive (what will happen), Prescriptive (what should we do)." },{ name: "Digital skills examined", detail: "Spreadsheet competence (used in CBE), data interpretation, presenting analysis clearly." },{ name: "The 5 professional skills (recap)", detail: "Communication, Commercial Acumen, Analysis, Evaluation, Scepticism. 4 marks each. Earned through HOW you write." }], key: "By now you should be able to recite the 5 professional skills and the marking signals for each. If not, re-read Chapter 1." }
+  ];
+
+  const ULTRA_TOPICS = ["PESTEL","Porter's 5 Forces","SFA Framework","SWOT / TOWS","Corporate Parenting / BCG","Ansoff Matrix","Harmon's Process Matrix","Mendelow's Matrix","Cultural Web","Context of Change","Risk Mitigation (TARA)","Financial Ratios","Financial Projections","Financing Structure","Budgets & MIS","Project Management (PID)","E-Business","E-Marketing","Big Data (3Vs)","CRM","IT Risks & Security","Code of Ethics","Public Interest","Chairman vs CEO / NEDs","Integrated Reporting (6 Capitals)"];
+
+  const PAPERS = [
+    { slug: "corjetz", title: "Corjetz", sitting: "September 2023", flavor: "Family-owned fertiliser business considering listing. Heavy on governance transition, investment appraisal, and risk review. The first paper in the new format — clean reference point.", themes: ["Governance","Investment","Risk","Family→listed"] },
+    { slug: "nctech", title: "NCTech", sitting: "December 2023", flavor: "Tech company with a major data breach. Cyber security, IT controls, talent management, and board crisis response. Most directly tech-relevant of the five.", themes: ["Cyber","Data breach","Talent","IT controls"] },
+    { slug: "pvs", title: "Praecuro Vet Services (PVS)", sitting: "March/June 2024", flavor: "Veterinary services group. Heavy governance focus — board meeting, internal audit, executive role design. Service business with stakeholder complexity.", themes: ["Governance","Internal audit","Stakeholders","Service strategy"] },
+    { slug: "beago", title: "Beago TNC", sitting: "September/December 2024", flavor: "Ride-sharing / mobility platform. Portfolio analysis (BCG), new service evaluation (food delivery), reputational crisis (news blog). Modern platform-economy strategy.", themes: ["BCG","New ventures","Reputation","Platform business"] },
+    { slug: "historic-places", title: "Historic Places (HP)", sitting: "March/June 2025", flavor: "UK heritage charity. Change management, performance comparison, ethical fundraising. Closest to your exam style — most recent paper.", themes: ["Change management","Performance","Ethics","Charity governance"] }
+  ];
+
+  const COAP_FIELDS = [
+    { key: 'industry', label: 'Industry & business model' },
+    { key: 'mission', label: 'Mission, vision, key objectives' },
+    { key: 'governance', label: 'Governance structure (board, key people)' },
+    { key: 'stakeholders', label: 'Key stakeholders (Mendelow them)' },
+    { key: 'strengths', label: 'Strengths & competitive advantages' },
+    { key: 'weaknesses', label: 'Weaknesses & vulnerabilities' },
+    { key: 'opportunities', label: 'Opportunities (PESTEL/market signals)' },
+    { key: 'threats', label: 'Threats & key risks' },
+    { key: 'financials', label: 'Financial position & key ratios' },
+    { key: 'strategy', label: 'Stated strategy & recent changes' },
+    { key: 'culture', label: 'Culture & people issues' },
+    { key: 'predictions', label: 'My task predictions for exam day' }
+  ];
+
+  const MOCK_ITEMS = ["Mock 1 — full 3h 15m on the CBE practice platform (around May 26)","Mark Mock 1 brutally against Sir Hasan's draft. Note 3 biggest weaknesses.","Targeted fix on those 3 weaknesses (1-2 days)","Mock 2 — full 3h 15m, different paper (around May 30)","Mark Mock 2. Compare to Mock 1 — improving in the 3 areas?","Final review — Ultra Notes top to bottom"];
+  const FINAL_ITEMS = ["May 31 — Light review only. Re-read Ultra Notes top to bottom (≈2 hours).","May 31 — Re-read pre-seen one final time. Glance at company-on-a-page worksheet.","May 31 — Re-read your 'moves list' — favourite phrases stolen from Sir Hasan.","May 31 — Pack bag tonight: ID, ACCA exam confirmation, water, snack.","May 31 — In bed by 10pm. No new content. Trust the work.","Jun 1 — Light revision morning only. Walk. Eat well. Hydrate.","Jun 1 — Re-read the 6 non-negotiables and 10 task types one more time.","Jun 1 — Confirm exam centre location and travel time. Plan to arrive 30 min early.","Jun 1 — In bed by 9-10pm."];
+  const MORNING_ITEMS = ["Wake up early. Real breakfast — protein + slow carbs, not just coffee.","Final 60 mins: re-read Ultra Notes one more time over breakfast.","Bring: ID, ACCA confirmation email, water.","Arrive at exam centre 30 min early. Phone off, in bag.","First 5 min of the exam: read the task requirements before exhibits. Classify each task type. Set time budget per task.","On every answer: format header (REPORT / EMAIL / etc.) + headings inside.","Obey the verb. Time discipline. Move on when time's up.","When you finish — submit. Don't second-guess. Walk out. Done."];
+
+  // === STATE ===
+  let state = { examDate: '2026-06-02', chapters: {}, ultra: {}, papers: {}, coap: {}, mocks: {}, final: {}, morning: {}, theme: 'light' };
+  let currentUser = null;
+  let syncTimer = null;
+  let isSyncing = false;
+
+  // === LOCAL STORAGE (instant cache) ===
+  function loadLocal() {
+    try {
+      const saved = localStorage.getItem('sbl_state_v4');
+      if (saved) state = { ...state, ...JSON.parse(saved) };
+    } catch(e) { console.warn('localStorage load failed', e); }
+  }
+  function saveLocal() {
+    try { localStorage.setItem('sbl_state_v4', JSON.stringify(state)); } catch(e) {}
+  }
+
+  // === SUPABASE SYNC ===
+  function setSyncStatus(status, text) {
+    const el = document.getElementById('syncStatus');
+    const txt = document.getElementById('syncStatusText');
+    if (!el || !txt) return;
+    el.classList.remove('syncing', 'offline');
+    if (status === 'syncing') el.classList.add('syncing');
+    if (status === 'offline') el.classList.add('offline');
+    txt.textContent = text;
+  }
+
+  async function pullFromSupabase() {
+    if (!currentUser) return;
+    setSyncStatus('syncing', 'Loading...');
+    try {
+      const { data, error } = await sb
+        .from('user_state')
+        .select('state, updated_at')
+        .eq('user_id', currentUser.id)
+        .maybeSingle();
+      if (error) throw error;
+      if (data && data.state) {
+        // Cloud wins on first load
+        state = { ...state, ...data.state };
+        saveLocal();
+      }
+      setSyncStatus('synced', 'Synced');
+    } catch (e) {
+      console.warn('Pull failed', e);
+      setSyncStatus('offline', 'Offline · using local');
+    }
+  }
+
+  function pushToSupabase() {
+    if (!currentUser) return;
+    if (syncTimer) clearTimeout(syncTimer);
+    setSyncStatus('syncing', 'Syncing...');
+    syncTimer = setTimeout(async () => {
+      isSyncing = true;
+      try {
+        const { error } = await sb
+          .from('user_state')
+          .upsert({ user_id: currentUser.id, state, updated_at: new Date().toISOString() });
+        if (error) throw error;
+        setSyncStatus('synced', 'Synced');
+      } catch (e) {
+        console.warn('Push failed', e);
+        setSyncStatus('offline', 'Offline · saved locally');
+      } finally {
+        isSyncing = false;
+      }
+    }, 1500);
+  }
+
+  function saveState() {
+    saveLocal();
+    pushToSupabase();
+  }
+
+  // === AUTH ===
+  function showError(msg) {
+    const err = document.getElementById('loginError');
+    err.textContent = msg;
+    err.classList.add('show');
+    setTimeout(() => err.classList.remove('show'), 5000);
+  }
+
+  async function handleLogin(e) {
+    e.preventDefault();
+    const email = document.getElementById('loginEmail').value.trim().toLowerCase();
+    const password = document.getElementById('loginPassword').value;
+    const btn = document.getElementById('loginBtn');
+
+    // Frontend gate
+    if (email !== ALLOWED_EMAIL.toLowerCase()) {
+      showError("Access denied. This study guide is for Maria only.");
+      return;
+    }
+
+    btn.disabled = true;
+    btn.classList.add('loading');
+    document.getElementById('loginError').classList.remove('show');
+
+    try {
+      const { data, error } = await sb.auth.signInWithPassword({ email, password });
+      if (error) throw error;
+      currentUser = data.user;
+      await onLoggedIn();
+    } catch (err) {
+      showError(err.message || 'Sign-in failed. Check your password.');
+      btn.disabled = false;
+      btn.classList.remove('loading');
+    }
+  }
+
+  async function signOut() {
+    if (!confirm('Sign out? Your progress is saved and will be there when you log back in.')) return;
+    await sb.auth.signOut();
+    location.reload();
+  }
+
+  async function onLoggedIn() {
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('appRoot').style.display = 'grid';
+    await pullFromSupabase();
+    render();
+  }
+
+  // === THEME ===
+  function applyTheme() {
+    document.documentElement.setAttribute('data-theme', state.theme);
+    const setIcon = (id) => {
+      const icon = document.getElementById(id);
+      if (!icon) return;
+      icon.innerHTML = state.theme === 'dark'
+        ? '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>'
+        : '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>';
+    };
+    setIcon('themeIcon');
+    setIcon('loginThemeIcon');
+  }
+  function toggleTheme() {
+    state.theme = state.theme === 'light' ? 'dark' : 'light';
+    applyTheme();
+    if (currentUser) saveState(); else saveLocal();
+  }
+  function toggleMenu() {
+    document.getElementById('navGroups').classList.toggle('open');
+  }
+
+  // === IST / COUNTDOWN ===
+  function getNowInIST() { return new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })); }
+  function getExamInIST() {
+    const [y, m, d] = state.examDate.split('-').map(Number);
+    return new Date(y, m - 1, d, 8, 0, 0);
+  }
+  function renderISTClock() {
+    const now = new Date();
+    const timeStr = now.toLocaleTimeString('en-US', { timeZone: 'Asia/Kolkata', hour: 'numeric', minute: '2-digit', hour12: true });
+    const dateStr = now.toLocaleDateString('en-US', { timeZone: 'Asia/Kolkata', weekday: 'short', day: 'numeric', month: 'short' });
+    if (document.getElementById('istClockTime')) document.getElementById('istClockTime').textContent = timeStr;
+    if (document.getElementById('istClockDate')) document.getElementById('istClockDate').textContent = dateStr.toUpperCase();
+    const examNow = getNowInIST();
+    const exam = getExamInIST();
+    const days = Math.max(0, Math.ceil((exam - examNow) / 86400000));
+    if (document.getElementById('istClockDaysNum')) document.getElementById('istClockDaysNum').textContent = days;
+    if (document.getElementById('loginCountdown')) document.getElementById('loginCountdown').textContent = days + ' days';
+  }
+  function renderCountdown() {
+    const now = getNowInIST();
+    const exam = getExamInIST();
+    const diffMs = exam - now;
+    const days = Math.max(0, Math.ceil(diffMs / 86400000));
+    const weeks = Math.floor(days / 7);
+    const hours = Math.max(0, Math.floor(diffMs / 3600000));
+    if (document.getElementById('cdDays')) document.getElementById('cdDays').textContent = days;
+    if (document.getElementById('cdWeeks')) document.getElementById('cdWeeks').textContent = weeks;
+    if (document.getElementById('cdHours')) document.getElementById('cdHours').textContent = hours.toLocaleString();
+    const opts = { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric', timeZone: 'Asia/Kolkata' };
+    const examDateUTC = new Date(state.examDate + 'T08:00:00+05:30');
+    if (document.getElementById('examDateDisplay')) document.getElementById('examDateDisplay').textContent = examDateUTC.toLocaleDateString('en-US', opts);
+  }
+
+  // === PROGRESS ===
+  function getPhaseStats() {
+    const chaptersChecked = Object.keys(state.chapters).filter(k => !k.startsWith('expanded_') && state.chapters[k]).length;
+    const ultraRated = Object.keys(state.ultra).filter(k => state.ultra[k]).length;
+    const p1Done = chaptersChecked + ultraRated;
+    const p1Total = CHAPTERS.length + ULTRA_TOPICS.length;
+    const p2Done = PAPERS.filter(p => state.papers[p.slug + '_done']).length;
+    const p2Total = PAPERS.length;
+    const coapFilled = COAP_FIELDS.filter(f => (state.coap[f.key] || '').trim().length > 0).length;
+    const mocksChecked = Object.keys(state.mocks).filter(k => state.mocks[k]).length;
+    const p3Done = coapFilled + mocksChecked;
+    const p3Total = COAP_FIELDS.length + MOCK_ITEMS.length;
+    const finalChecked = Object.keys(state.final).filter(k => state.final[k]).length;
+    const morningChecked = Object.keys(state.morning).filter(k => state.morning[k]).length;
+    const p4Done = finalChecked + morningChecked;
+    const p4Total = FINAL_ITEMS.length + MORNING_ITEMS.length;
+    return [
+      { num: 1, name: 'Phase 1 progress', sub: 'Chapters + topics rated', done: p1Done, total: p1Total },
+      { num: 2, name: 'Phase 2 progress', sub: 'Past papers worked', done: p2Done, total: p2Total },
+      { num: 3, name: 'Phase 3 progress', sub: 'Pre-seen + mocks', done: p3Done, total: p3Total },
+      { num: 4, name: 'Phase 4 progress', sub: 'Final 48 hours', done: p4Done, total: p4Total }
+    ];
+  }
+  function renderProgress() {
+    const phases = getPhaseStats();
+    let activePhase = phases.find(p => p.done < p.total);
+    let allDone = false;
+    if (!activePhase) { activePhase = phases[3]; allDone = true; }
+    const pct = activePhase.total === 0 ? 0 : Math.round((activePhase.done / activePhase.total) * 100);
+    document.getElementById('progressTitle').textContent = activePhase.name;
+    document.getElementById('progressFill').style.width = pct + '%';
+    document.getElementById('progressText').textContent = pct + '% complete';
+    document.getElementById('progressSub').textContent = `${activePhase.done} of ${activePhase.total} · ${activePhase.sub}`;
+    const celebrate = document.getElementById('progressCelebrate');
+    if (allDone) {
+      celebrate.textContent = '✓ Ready for exam day. Trust the work.';
+      celebrate.style.display = 'block';
+    } else if (activePhase.num > 1) {
+      const prev = phases[activePhase.num - 2];
+      celebrate.textContent = `✓ Phase ${prev.num} done — onto ${activePhase.name.toLowerCase()}`;
+      celebrate.style.display = 'block';
+    } else {
+      celebrate.style.display = 'none';
+    }
+    phases.forEach((p, idx) => {
+      const card = document.querySelector(`.phase-card[data-phase="${p.num}"]`);
+      const meta = document.querySelector(`.phase-meta[data-phase-meta="${p.num}"]`);
+      if (!card || !meta) return;
+      card.classList.remove('active', 'completed');
+      const isActive = p.num === activePhase.num && !allDone;
+      const isComplete = p.done >= p.total && p.total > 0;
+      if (isActive) card.classList.add('active');
+      if (isComplete) card.classList.add('completed');
+      const dateRange = meta.innerHTML.split('<br>')[0];
+      let badge;
+      if (isComplete) badge = '<span class="phase-status status-done">Complete ✓</span>';
+      else if (isActive) badge = '<span class="phase-status status-active">Active</span>';
+      else {
+        const startMsg = ['Starts Apr 29', 'Starts May 6', 'Starts May 19', 'Starts May 31'][idx];
+        badge = `<span class="phase-status status-locked">${startMsg}</span>`;
+      }
+      meta.innerHTML = dateRange + '<br>' + badge;
+    });
+  }
+
+  // === RENDERERS ===
+  function render() {
+    applyTheme();
+    renderCountdown(); renderISTClock();
+    renderChapters(); renderUltra(); renderPapers(); renderCOAP();
+    renderChecklist('mockChecklist', MOCK_ITEMS, 'mocks');
+    renderChecklist('finalChecklist', FINAL_ITEMS, 'final');
+    renderChecklist('morningChecklist', MORNING_ITEMS, 'morning');
+    renderProgress();
+  }
+  function renderChapters() {
+    const container = document.getElementById('chaptersList');
+    container.innerHTML = '';
+    CHAPTERS.forEach((ch, idx) => {
+      const num = String(idx + 1).padStart(2, '0');
+      const checked = !!state.chapters[idx];
+      const expanded = state.chapters['expanded_' + idx];
+      const row = document.createElement('div');
+      row.className = 'chapter-row' + (checked ? ' checked' : '') + (expanded ? ' expanded' : '');
+      row.innerHTML = `
+        <div class="chapter-header">
+          <input type="checkbox" ${checked ? 'checked' : ''} data-idx="${idx}" />
+          <span class="chapter-num">Ch ${num}</span>
+          <span class="chapter-title">${ch.title}</span>
+          <button class="chapter-toggle">${expanded ? '− collapse' : '+ expand'}</button>
+        </div>
+        <div class="chapter-content">
+          <p>${ch.summary}</p>
+          <h5>Key concepts</h5>
+          <ul>${ch.points.map(p => `<li><span class="model-name">${p.name}.</span> ${p.detail}</li>`).join('')}</ul>
+          <div class="key-line"><strong>Bottom line:</strong> ${ch.key}</div>
+        </div>`;
+      const cb = row.querySelector('input[type="checkbox"]');
+      cb.addEventListener('click', (e) => e.stopPropagation());
+      cb.addEventListener('change', (e) => {
+        e.stopPropagation();
+        state.chapters[idx] = e.target.checked;
+        saveState(); renderChapters(); renderProgress();
+      });
+      row.querySelector('.chapter-header').addEventListener('click', (e) => {
+        if (e.target.tagName === 'INPUT') return;
+        state.chapters['expanded_' + idx] = !state.chapters['expanded_' + idx];
+        saveState(); renderChapters();
+      });
+      container.appendChild(row);
+    });
+  }
+  function renderUltra() {
+    const container = document.getElementById('ultraList');
+    container.innerHTML = '';
+    ULTRA_TOPICS.forEach((name, idx) => {
+      const status = state.ultra[idx] || null;
+      const div = document.createElement('div');
+      div.className = 'ultra-item';
+      div.innerHTML = `
+        <span>${name}</span>
+        <div class="ultra-buttons">
+          <button class="ultra-btn green ${status === 'g' ? 'active' : ''}" data-idx="${idx}" data-status="g" title="Know cold"></button>
+          <button class="ultra-btn yellow ${status === 'y' ? 'active' : ''}" data-idx="${idx}" data-status="y" title="Vaguely remember"></button>
+          <button class="ultra-btn red ${status === 'r' ? 'active' : ''}" data-idx="${idx}" data-status="r" title="Don't know"></button>
+        </div>`;
+      div.querySelectorAll('.ultra-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const i = parseInt(e.target.dataset.idx);
+          const s = e.target.dataset.status;
+          state.ultra[i] = state.ultra[i] === s ? null : s;
+          saveState(); renderUltra(); renderProgress();
+        });
+      });
+      container.appendChild(div);
+    });
+  }
+  function renderPapers() {
+    const container = document.getElementById('papersList');
+    container.innerHTML = '';
+    PAPERS.forEach(p => {
+      const completed = state.papers[p.slug + '_done'];
+      const card = document.createElement('div');
+      card.className = 'paper-card' + (completed ? ' completed' : '');
+      card.innerHTML = `
+        <div class="paper-header">
+          <div class="paper-title">${p.title}</div>
+          <div class="paper-sitting">${p.sitting}</div>
+        </div>
+        <div class="paper-flavor">${p.flavor}</div>
+        <div>${p.themes.map(t => `<span class="tool-tag">${t}</span>`).join('')}</div>
+        <div class="paper-files">
+          <a href="./materials/papers/${p.slug}/preseen.pdf" target="_blank" class="file-link preseen">📄 Pre-seen</a>
+          <a href="./materials/papers/${p.slug}/exhibit-1.pdf" target="_blank" class="file-link">Exhibit 1</a>
+          <a href="./materials/papers/${p.slug}/exhibit-2.pdf" target="_blank" class="file-link">Exhibit 2</a>
+          <a href="./materials/papers/${p.slug}/exhibit-3.pdf" target="_blank" class="file-link">Exhibit 3</a>
+          <a href="./materials/papers/${p.slug}/exhibit-4.pdf" target="_blank" class="file-link">Exhibit 4</a>
+          <a href="./materials/papers/${p.slug}/answer.pdf" target="_blank" class="file-link answer">✓ Sir Hasan's answer</a>
+        </div>
+        <div class="paper-progress">
+          <label>
+            <input type="checkbox" data-slug="${p.slug}" ${completed ? 'checked' : ''} />
+            <span>Attempted under timed conditions, marked, weaknesses logged</span>
+          </label>
+        </div>`;
+      card.querySelector('input[type="checkbox"]').addEventListener('change', (e) => {
+        state.papers[p.slug + '_done'] = e.target.checked;
+        saveState(); renderPapers(); renderProgress();
+      });
+      container.appendChild(card);
+    });
+  }
+  function renderCOAP() {
+    const container = document.getElementById('coapGrid');
+    container.innerHTML = '';
+    COAP_FIELDS.forEach(f => {
+      const div = document.createElement('div');
+      div.className = 'coap-field';
+      div.innerHTML = `
+        <label for="coap_${f.key}">${f.label}</label>
+        <textarea id="coap_${f.key}" data-key="${f.key}" placeholder="Fill from the pre-seen...">${state.coap[f.key] || ''}</textarea>`;
+      div.querySelector('textarea').addEventListener('input', (e) => {
+        state.coap[e.target.dataset.key] = e.target.value;
+        saveState(); renderProgress();
+      });
+      container.appendChild(div);
+    });
+  }
+  function renderChecklist(containerId, items, stateKey) {
+    const container = document.getElementById(containerId);
+    container.innerHTML = '';
+    items.forEach((text, idx) => {
+      const checked = !!state[stateKey][idx];
+      const div = document.createElement('label');
+      div.className = 'checklist-item' + (checked ? ' checked' : '');
+      div.innerHTML = `
+        <input type="checkbox" ${checked ? 'checked' : ''} data-idx="${idx}" />
+        <span class="checklist-text">${text}</span>`;
+      div.querySelector('input').addEventListener('change', (e) => {
+        state[stateKey][parseInt(e.target.dataset.idx)] = e.target.checked;
+        saveState(); renderChecklist(containerId, items, stateKey); renderProgress();
+      });
+      container.appendChild(div);
+    });
+  }
+
+  async function resetAll() {
+    if (!confirm('This will erase ALL your progress (local AND cloud). Are you absolutely sure?')) return;
+    localStorage.removeItem('sbl_state_v4');
+    if (currentUser) {
+      try {
+        await sb.from('user_state').delete().eq('user_id', currentUser.id);
+      } catch (e) { console.warn('Cloud delete failed', e); }
+    }
+    location.reload();
+  }
+
+  // Sidebar nav
+  document.querySelectorAll('.nav-item').forEach(item => {
+    item.addEventListener('click', () => {
+      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+      item.classList.add('active');
+      const navGroups = document.getElementById('navGroups');
+      if (navGroups) navGroups.classList.remove('open');
+    });
+  });
+
+  // Re-sync on tab focus
+  window.addEventListener('focus', () => {
+    if (currentUser && !isSyncing) pullFromSupabase().then(render);
+  });
+
+  // Update clocks every minute
+  setInterval(() => { renderISTClock(); if (currentUser) renderCountdown(); }, 60000);
+
+  // === INIT ===
+  loadLocal();
+  applyTheme();
+  renderISTClock(); // for the login screen countdown
+
+  // Check for existing session
+  (async () => {
+    const { data } = await sb.auth.getSession();
+    if (data.session && data.session.user.email.toLowerCase() === ALLOWED_EMAIL.toLowerCase()) {
+      currentUser = data.session.user;
+      await onLoggedIn();
+    }
+    // else: login screen stays visible
+  })();
+</script>
+</body>
+</html>
