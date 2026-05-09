@@ -361,6 +361,31 @@
   .ultra-btn.yellow.active { background: #D9A441; border-color: #D9A441; }
   .ultra-btn.red.active { background: #C7593F; border-color: #C7593F; }
 
+  /* ULTRA TOPIC - GUIDE EXPANDER */
+  .ultra-grid { gap: 8px; }
+  .ultra-item-wrap { display: flex; flex-direction: column; }
+  .ultra-item-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 12px; background: var(--bg-card); border: 1px solid var(--line); border-radius: 8px; font-size: 13px; gap: 10px; transition: border-color 0.15s; }
+  .ultra-item-wrap.expanded .ultra-item-row { border-color: var(--accent); border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
+  .ultra-name-btn { display: flex; align-items: center; gap: 8px; flex: 1; cursor: pointer; background: none; border: none; padding: 0; color: var(--ink); font-size: 13px; font-family: var(--sans); text-align: left; font-weight: 500; }
+  .ultra-caret { font-size: 10px; color: var(--ink-faint); transition: transform 0.2s; display: inline-block; width: 10px; }
+  .ultra-item-wrap.expanded .ultra-caret { transform: rotate(90deg); color: var(--accent); }
+  .ultra-name-btn:hover .ultra-caret { color: var(--accent); }
+  .ultra-guide { display: none; padding: 18px 20px 20px 20px; background: var(--bg-card); border: 1px solid var(--accent); border-top: none; border-radius: 0 0 8px 8px; font-size: 13.5px; line-height: 1.65; }
+  .ultra-item-wrap.expanded .ultra-guide { display: block; animation: guideIn 0.25s ease-out; }
+  @keyframes guideIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
+  .guide-section { margin-bottom: 14px; }
+  .guide-section:last-child { margin-bottom: 0; }
+  .guide-label { font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); margin-bottom: 6px; font-weight: 500; }
+  .guide-section p { font-size: 13.5px; margin-bottom: 6px; color: var(--ink-soft); }
+  .guide-section ul { margin: 4px 0 8px 18px; }
+  .guide-section li { font-size: 13px; margin-bottom: 4px; color: var(--ink-soft); }
+  .guide-section li strong { color: var(--ink); }
+  .guide-example { background: var(--bg-soft); border-left: 2px solid var(--gold); border-radius: 4px; padding: 10px 14px; font-size: 12.5px; line-height: 1.55; margin-top: 6px; color: var(--ink); }
+  .guide-example .ex-q { font-weight: 500; color: var(--ink); margin-bottom: 6px; display: block; font-style: italic; }
+  .guide-tip { background: var(--accent-soft); border-left: 2px solid var(--accent); padding: 8px 12px; border-radius: 4px; font-size: 12.5px; color: var(--ink); margin-top: 6px; }
+  @media (max-width: 640px) { .ultra-guide { padding: 14px 14px 16px 14px; } }
+
+
   .callout { background: var(--accent-soft); border-left: 3px solid var(--accent); padding: 16px 20px; border-radius: 4px; margin: 24px 0; font-size: 15px; }
   .callout-warn { background: var(--warn-soft); border-left-color: var(--warn); }
   .callout-gold { background: var(--gold-soft); border-left-color: var(--gold); }
@@ -1009,7 +1034,307 @@
     { title: "Other employability & digital skills", summary: "The professional skills chapter. Already woven through this whole guide. Read Chapter 1's marking guides for Communication, Analysis, Scepticism, Evaluation, Commercial Acumen.", points: [{ name: "Data analytics", detail: "Descriptive (what happened), Diagnostic (why), Predictive (what will happen), Prescriptive (what should we do)." },{ name: "Digital skills examined", detail: "Spreadsheet competence (used in CBE), data interpretation, presenting analysis clearly." },{ name: "The 5 professional skills (recap)", detail: "Communication, Commercial Acumen, Analysis, Evaluation, Scepticism. 4 marks each. Earned through HOW you write." }], key: "By now you should be able to recite the 5 professional skills and the marking signals for each. If not, re-read Chapter 1." }
   ];
 
-  const ULTRA_TOPICS = ["PESTEL","Porter's 5 Forces","SFA Framework","SWOT / TOWS","Corporate Parenting / BCG","Ansoff Matrix","Harmon's Process Matrix","Mendelow's Matrix","Cultural Web","Context of Change","Risk Mitigation (TARA)","Financial Ratios","Financial Projections","Financing Structure","Budgets & MIS","Project Management (PID)","E-Business","E-Marketing","Big Data (3Vs)","CRM","IT Risks & Security","Code of Ethics","Public Interest","Chairman vs CEO / NEDs","Integrated Reporting (6 Capitals)"];
+  const ULTRA_TOPICS = [
+    { name: "PESTEL", guide: {
+      usedWhen: "Macro/external/country environment analysis. Trigger words: 'analyse the macro environment', 'external factors', 'country environment'.",
+      format: [
+        "Use 6 sub-headings: <strong>Political, Economic, Social, Technological, Ecological, Legal</strong>.",
+        "Under each, give 1-2 specific points from the scenario — not generic textbook stuff.",
+        "End each point with: <strong>favourable / unfavourable</strong> + the impact on the company."
+      ],
+      tip: "Always tie back to the scenario's country and industry. Generic PESTEL = no marks. Look for overlapping points across letters (e.g. tax = political + legal).",
+      example: { q: "Q: Analyse the macro environment of Corjet (UK-based aviation, 2023).", a: "Political: Recent UK aviation policy reforms — favourable, supports expansion. Economic: High inflation post-pandemic — unfavourable, raises fuel and labour costs. Social: Growing demand for sustainable travel — favourable, supports green aviation strategy..." }
+    }},
+    { name: "Porter's 5 Forces", guide: {
+      usedWhen: "Industry/micro/competitive environment analysis. Used when assessing how attractive an industry is OR analysing competition. Trigger words: 'industry analysis', 'competitive forces', 'attractiveness of industry'.",
+      format: [
+        "Use 5 sub-headings: <strong>Threat of New Entrants, Power of Buyers, Power of Suppliers, Threat of Substitutes, Competitive Rivalry</strong>.",
+        "Under each, state <strong>HIGH or LOW</strong> with 1-2 reasons from scenario.",
+        "Conclude: overall industry attractiveness."
+      ],
+      tip: "For each force, ask: 'Is this making life HARDER or EASIER for our company?' Be decisive — examiners want a clear high/low call.",
+      example: { q: "Q: Analyse the competitive forces in the budget airline industry.", a: "Threat of New Entrants: HIGH — low capital required for online ticketing, deregulation in EU. Power of Buyers: HIGH — customers easily compare prices online. Power of Suppliers: HIGH — only 2 major aircraft makers (Boeing, Airbus). Substitutes: HIGH — high-speed rail in Europe. Rivalry: HIGH — many low-cost carriers competing on same routes. → Industry is unattractive." }
+    }},
+    { name: "SFA Framework", guide: {
+      usedWhen: "Evaluating a PROPOSED strategy — usually an acquisition or new venture. Trigger words: 'evaluate the proposal to acquire...', 'evaluate the option of opening...', 'should we proceed with...'.",
+      format: [
+        "<strong>SUITABILITY</strong> — focuses on EXTERNAL factors. Para 1: home country. Para 2: target country. Para 3: target company.",
+        "<strong>FEASIBILITY</strong> — focuses on RESOURCES. Do we have the staff, finance, skills, technology, experience, time?",
+        "<strong>ACCEPTABILITY</strong> — focuses on FINANCIALS + STAKEHOLDERS. Para 1: shareholder acceptance (private = if owners agree; listed = if positive NPV). Para 2: cultural differences if cross-border. Para 3: review financial projections.",
+        "<strong>Conclusion required?</strong> Only if question explicitly asks. Otherwise skip."
+      ],
+      tip: "This is Sir Hasan's most-loved framework. Use the 'Para 1, Para 2, Para 3' structure under each S/F/A heading and you'll never run out of things to say.",
+      example: { q: "Q: Assess the suitability, acceptability and feasibility of the AI flight simulator investment (Corjet, Sept 2023).", a: "SUITABILITY: Aligns with Corjet's core value of innovation; AI offers more realistic simulations improving pilot safety; reduces training time by 4 months. ACCEPTABILITY: Corjet is family-managed so owners must agree; financial projections show positive NPV — reasonable return. FEASIBILITY: Corjet has the financial resources; partnership with AI vendor reduces technical capability gap." }
+    }},
+    { name: "SWOT / TOWS", guide: {
+      usedWhen: "Holistic position analysis combining internal + external. Trigger words: 'analyse the strategic position', 'identify strengths and weaknesses', 'SWOT analysis'.",
+      format: [
+        "<strong>SWOT</strong>: 4 sub-headings — Strengths, Weaknesses (internal), Opportunities, Threats (external). 2-4 specific points each from scenario.",
+        "<strong>TOWS</strong> goes further: combine into 4 strategy quadrants — <strong>SO</strong> (use strengths to seize opportunities), <strong>WO</strong> (overcome weakness via opportunity), <strong>ST</strong> (use strengths to defend threats), <strong>WT</strong> (minimise weakness AND threat).",
+        "Always be specific to the company — 'good staff' is too generic. 'Pilot retention rate of 95% in industry averaging 70%' is a strength."
+      ],
+      tip: "If asked to 'analyse position' use SWOT. If asked to 'recommend strategies' use TOWS. The TOWS extension is what separates pass from merit.",
+      example: { q: "Mini SWOT for Historic Places (UK heritage charity).", a: "S: Strong volunteer base, royal charter status. W: Aging visitor demographic, declining donations. O: Growing 'staycation' trend post-pandemic. T: Government grant cuts, rising energy costs at sites. TOWS-SO: Use volunteer base to launch new staycation packages." }
+    }},
+    { name: "Corporate Parenting / BCG", guide: {
+      usedWhen: "Portfolio analysis — when company has multiple business units, products, or services. Trigger words: 'analyse the portfolio', 'evaluate the product mix', 'corporate-level strategy'.",
+      format: [
+        "Plot each business unit on 2 axes: <strong>Market Growth Rate</strong> (Y-axis) and <strong>Relative Market Share</strong> (X-axis).",
+        "<strong>Stars</strong> (high growth + high share): invest, will become cash cows.",
+        "<strong>Cash Cows</strong> (low growth + high share): milk for cash, fund stars.",
+        "<strong>Question Marks</strong> (high growth + low share): decide — invest heavily or divest.",
+        "<strong>Dogs</strong> (low growth + low share): consider divesting.",
+        "Recommend an action per unit."
+      ],
+      tip: "Don't just label — recommend what to DO with each. 'X is a Dog' = 1 mark. 'X is a Dog, recommend phased divestment to free capital for question-mark unit Y' = 3 marks.",
+      example: { q: "BCG for Beago TNC (mobility platform).", a: "Ride-sharing core service: CASH COW (mature market, dominant share — milk for cash). Food delivery: QUESTION MARK (high growth, low share — invest heavily or divest). E-scooter trial: DOG (saturated market, low share — consider exit)." }
+    }},
+    { name: "Ansoff Matrix", guide: {
+      usedWhen: "Recommending growth direction. Trigger words: 'how should we grow?', 'recommend a growth strategy', 'evaluate the new product/market move'.",
+      format: [
+        "2 axes: Products (existing/new) × Markets (existing/new). 4 quadrants:",
+        "<strong>Market Penetration</strong> (existing/existing): increase share with current products in current markets. Lowest risk.",
+        "<strong>Market Development</strong> (existing/new): take current products to new markets/segments/geographies.",
+        "<strong>Product Development</strong> (existing markets/new products): launch new products to current customers.",
+        "<strong>Diversification</strong> (new/new): new products AND new markets. Highest risk."
+      ],
+      tip: "Risk increases as you move away from the 'existing/existing' corner. Always factor risk into your recommendation. Diversification needs strong justification.",
+      example: { q: "Ansoff classification for PVS adding pet insurance.", a: "Existing market (current pet owners) + new product (insurance) = Product Development. Lower risk than diversification because customer base is known." }
+    }},
+    { name: "Harmon's Process Matrix", guide: {
+      usedWhen: "Asked to evaluate or improve business processes. Trigger words: 'evaluate the process', 'process improvement', 'redesign'.",
+      format: [
+        "Plot processes on 2 axes: <strong>Strategic Importance</strong> × <strong>Process Complexity/Dynamics</strong>.",
+        "<strong>Low importance + low complexity</strong>: automate or outsource (commodity work).",
+        "<strong>Low importance + high complexity</strong>: outsource to specialists.",
+        "<strong>High importance + low complexity</strong>: standardise and use ERP/automation.",
+        "<strong>High importance + high complexity</strong>: keep in-house, invest in people and systems."
+      ],
+      tip: "The 'high importance + high complexity' quadrant is where competitive advantage lives. Never outsource these.",
+      example: { q: "PVS process classification.", a: "Veterinary diagnosis = high importance + high complexity (keep in-house, invest in vet training). Payroll = low importance + low complexity (outsource or automate)." }
+    }},
+    { name: "Mendelow's Matrix", guide: {
+      usedWhen: "Stakeholder analysis. Trigger words: 'identify key stakeholders', 'how should stakeholders be managed', 'stakeholder concerns'.",
+      format: [
+        "2 axes: <strong>Power</strong> (Y) × <strong>Interest</strong> (X). 4 quadrants:",
+        "<strong>Low/Low</strong>: Minimal Effort — monitor only.",
+        "<strong>Low Power + High Interest</strong>: Keep Informed — regular updates, consultations.",
+        "<strong>High Power + Low Interest</strong>: Keep Satisfied — high-level updates, address concerns.",
+        "<strong>High/High</strong>: Key Players — actively engage, involve in decisions."
+      ],
+      tip: "For each stakeholder you place, recommend a SPECIFIC management action. 'Manage closely' is generic. 'Hold quarterly briefings with the institutional shareholders' is specific.",
+      example: { q: "Mendelow for Historic Places' new ticketing system.", a: "Trustees: high power, high interest → Key Players (board approval, monthly reports). Volunteers: low power, high interest → Keep Informed (newsletter updates). Government heritage body: high power, low interest → Keep Satisfied (compliance reporting). Casual visitors: low/low → Minimal Effort." }
+    }},
+    { name: "Cultural Web", guide: {
+      usedWhen: "Analysing organisational culture — usually as part of a change task. Trigger words: 'analyse the culture', 'cultural barriers to change', 'why is change being resisted'.",
+      format: [
+        "6 elements that hold culture in place, all surrounding the central <strong>Paradigm</strong> (the 'taken-for-granted' worldview):",
+        "<strong>Stories</strong> — what tales people tell about the organisation",
+        "<strong>Symbols</strong> — logos, dress code, language, status markers",
+        "<strong>Power Structures</strong> — who really has influence (often informal)",
+        "<strong>Organisational Structure</strong> — formal hierarchy, reporting lines",
+        "<strong>Control Systems</strong> — what's measured, rewarded, punished",
+        "<strong>Rituals & Routines</strong> — daily habits, meetings, ceremonies"
+      ],
+      tip: "If you want to CHANGE a culture, you have to change multiple elements of the web — culture is sticky. Don't just describe — explain how each element supports or blocks the proposed change.",
+      example: { q: "Cultural Web of NCTech (post-data-breach).", a: "Stories: founder myth of 'move fast and break things'. Symbols: open-plan office, no dress code. Power: tech leads override governance. Structure: flat. Control: speed-of-shipping rewarded over security. Rituals: daily standups, no security reviews. → Paradigm: speed > safety. To fix breach culture, ALL 6 must change." }
+    }},
+    { name: "Context of Change", guide: {
+      usedWhen: "Asked to evaluate readiness for change OR design a change approach. Trigger words: 'how should change be managed', 'is the organisation ready for change'.",
+      format: [
+        "Balogun & Hope Hailey's 8 contextual features:",
+        "<strong>Time</strong> (urgent or gradual?), <strong>Scope</strong> (realignment or transformation?), <strong>Preservation</strong> (what must be kept?), <strong>Diversity</strong> (homogeneous or varied workforce?), <strong>Capability</strong> (do we have change skills?), <strong>Capacity</strong> (resources available?), <strong>Readiness</strong> (do people support change?), <strong>Power</strong> (does change leader have authority?).",
+        "For each, comment on the company's current position from the scenario."
+      ],
+      tip: "These 8 features tell you what change approach will work. Low Capability + Low Readiness = need education + participation. High Power + Urgent Time = direction/coercion may be needed.",
+      example: { q: "Change context for Historic Places' digital transformation.", a: "Time: not urgent (multi-year). Scope: transformation (whole way of working). Preservation: heritage values must remain. Diversity: high (volunteers + paid staff). Capability: low (limited digital skills). Capacity: limited budget. Readiness: mixed. Power: trustees support. → Recommend phased, participative approach with training." }
+    }},
+    { name: "Risk Mitigation (TARA)", guide: {
+      usedWhen: "Asked to recommend how to handle identified risks. Trigger words: 'recommend mitigation', 'how should this risk be managed', 'risk response'.",
+      format: [
+        "For each risk, plot on impact × likelihood, then choose ONE response:",
+        "<strong>T — Transfer</strong>: pass risk to another party (insurance, outsourcing). Use when impact is high but cost-effective to transfer.",
+        "<strong>A — Avoid</strong>: don't do the risky activity. Use when likelihood AND impact are both high.",
+        "<strong>R — Reduce</strong>: mitigation controls (training, procedures, redundancy). Use when likelihood is high but you can't avoid.",
+        "<strong>A — Accept</strong>: do nothing. Use only when both impact and likelihood are low."
+      ],
+      tip: "Match each specific risk in the scenario to a specific TARA response with a specific control. 'Transfer the risk' isn't enough. 'Transfer via cyber insurance with $X coverage' is.",
+      example: { q: "TARA for NCTech post-breach risks.", a: "Future data breach: REDUCE (encryption + staff training + incident response plan). Lawsuits from current breach: TRANSFER (cyber liability insurance). Reputational damage: REDUCE (PR strategy, customer compensation). Operating in highly regulated EU market: ACCEPT (cost of compliance is bearable)." }
+    }},
+    { name: "Financial Ratios", guide: {
+      usedWhen: "Performance analysis tasks. Trigger words: 'analyse financial performance', 'evaluate the financials', 'comment on profitability'.",
+      format: [
+        "Group ratios into 4 categories — calculate AND comment:",
+        "<strong>Profitability</strong>: Gross margin, Operating margin, ROCE.",
+        "<strong>Liquidity</strong>: Current ratio, Quick ratio, Operating cycle.",
+        "<strong>Efficiency</strong>: Inventory days, Receivables days, Payables days.",
+        "<strong>Gearing</strong>: Debt-to-equity, Interest cover.",
+        "After each ratio: compare to prior year / industry / target. Comment on direction and reason."
+      ],
+      tip: "Calculation is 1 mark; interpretation is 2 marks. Always say WHY the ratio moved (e.g., 'margin fell because raw material costs rose 15% per the scenario').",
+      example: { q: "Operating margin analysis.", a: "Operating margin fell from 12% to 8% YoY. The decline reflects the 15% increase in fuel costs noted in Exhibit 2, partly offset by fare increases. Margin is now below the industry average of 10%, signalling competitive pressure." }
+    }},
+    { name: "Financial Projections", guide: {
+      usedWhen: "Asked to assess investment or project financials. Trigger words: 'evaluate the financial projections', 'assess the investment', 'review the proposal financially'.",
+      format: [
+        "Sir Hasan's 5-step check on every financial projection:",
+        "<strong>1. DCF / NPV</strong> — is it positive at the cost of capital? Is the discount rate realistic?",
+        "<strong>2. Payback period</strong> — how long until the project recovers initial investment?",
+        "<strong>3. Assumptions</strong> — are revenue/cost growth rates realistic? Question every number.",
+        "<strong>4. Tax</strong> — are tax cash flows treated correctly? Capital allowances?",
+        "<strong>5. Sensitivity analysis</strong> — what's the margin of safety if assumptions are wrong?"
+      ],
+      tip: "Always question 2-3 assumptions specifically. That's the Scepticism professional skill — worth easy marks.",
+      example: { q: "Critique the AI simulator projection (Corjet).", a: "1. NPV: positive at $4.2M — looks good. 2. Payback: 3 years — within normal limit. 3. Assumption challenge: 30% revenue growth in year 1 seems aggressive given industry growth of 5%. 4. Tax: capital allowances appear correctly applied. 5. Sensitivity: a 10% shortfall in revenue would turn NPV negative — narrow margin." }
+    }},
+    { name: "Financing Structure", guide: {
+      usedWhen: "Recommending how to fund a project or strategy. Trigger words: 'how should this be financed', 'recommend a financing structure'.",
+      format: [
+        "Compare 3 main sources:",
+        "<strong>Internal (retained earnings)</strong> — no cost, no dilution, but limited.",
+        "<strong>Equity (new shares)</strong> — no repayment, no interest, BUT dilutes ownership and signals weakness.",
+        "<strong>Debt (loans, bonds)</strong> — tax-deductible interest, retains control, BUT increases gearing and risk.",
+        "Discuss in context: existing gearing, cash flow, ownership structure, project risk."
+      ],
+      tip: "For private/family-owned firms, usually recommend retained earnings + debt. For listed firms, the answer often depends on existing capital structure and cost of capital.",
+      example: { q: "Financing the AI simulator (Corjet, family-owned).", a: "Internal cash: limited reserves. Equity: would require external investors and dilute family control — not desirable. Debt: current gearing is low (30%), interest cover strong, project has stable cash flows. → Recommend bank loan or bond, preserving family ownership." }
+    }},
+    { name: "Budgets & MIS", guide: {
+      usedWhen: "Evaluating control systems or management info. Trigger words: 'evaluate the budgeting process', 'comment on management information'.",
+      format: [
+        "Budget approaches: <strong>Incremental</strong> (last year ± %, simple but encourages waste), <strong>Zero-based</strong> (justify every cost, time-consuming but disciplined), <strong>Rolling</strong> (continuously updated, good for volatile environments), <strong>Activity-based</strong> (links costs to activities/drivers).",
+        "MIS quality criteria: <strong>ACCURATE</strong> — Accurate, Complete, Cost-effective, Understandable, Relevant, Authoritative, Timely, Easy to use."
+      ],
+      tip: "When evaluating an existing system, score it against ACCURATE. When recommending a new approach, match the budget type to the business environment (volatile = rolling, mature = incremental).",
+      example: { q: "Budget for a fast-growing startup.", a: "Incremental budgeting won't work as historical data is unrepresentative. Rolling budgets recommended — review quarterly, adapt to market changes. Zero-based may be useful for the first year to instill cost discipline." }
+    }},
+    { name: "Project Management (PID)", guide: {
+      usedWhen: "Project setup, evaluation, or troubleshooting. Trigger words: 'should this project proceed', 'why is the project failing', 'recommend project governance'.",
+      format: [
+        "<strong>PID (Project Initiation Document)</strong> contents:",
+        "Scope, Objectives, Deliverables, Stakeholders, Risks, Costs, Timeline, Quality criteria, Roles & responsibilities, Success measures.",
+        "<strong>Sponsor vs Manager</strong>: Sponsor = senior, accountable for benefits, secures resources, removes barriers. Manager = day-to-day delivery.",
+        "<strong>Business case</strong>: justifies WHY the project should happen — costs vs benefits, alternatives, risks. Reviewed at every gate."
+      ],
+      tip: "If a project is failing, ask: (a) Is the PID clear? (b) Is the sponsor doing their job? (c) Is the business case still valid? Most failures trace back to one of these.",
+      example: { q: "Why is the digital transformation project failing? (HP)", a: "1. PID was vague — no clear deliverables. 2. Sponsor (CEO) is hands-off. 3. No business case review at gates — the original ROI assumptions are now stale. → Recommend formal project re-baseline." }
+    }},
+    { name: "E-Business", guide: {
+      usedWhen: "Asked about going digital, online channels, or e-commerce strategy. Trigger words: 'develop an online strategy', 'e-business model'.",
+      format: [
+        "<strong>3 main e-business models</strong>: B2B (business to business), B2C (business to consumer), C2C (consumer to consumer).",
+        "<strong>Benefits</strong>: 24/7 availability, global reach, lower transaction costs, data capture for analytics.",
+        "<strong>Risks</strong>: cyber security, technology dependence, channel conflict (with physical), customer service challenges.",
+        "<strong>Implementation</strong>: payment processing, logistics, returns, customer support, mobile-first design."
+      ],
+      tip: "Always discuss BOTH benefits and risks. Examiners reward balanced thinking.",
+      example: { q: "Should HP launch an online merchandise store?", a: "B2C model. Benefits: reach beyond physical site visitors, capture donor data. Risks: cyber attacks on payment data, fulfillment costs, may cannibalise physical shop. Implementation: integrate with existing Gift Aid system." }
+    }},
+    { name: "E-Marketing", guide: {
+      usedWhen: "Asked about digital marketing strategy. Trigger words: 'how to market online', 'digital marketing approach'.",
+      format: [
+        "<strong>6 I's framework</strong>:",
+        "<strong>Interactivity</strong> — two-way engagement (chat, comments, reviews)",
+        "<strong>Intelligence</strong> — data capture and analytics",
+        "<strong>Individualisation</strong> — personalised content per user",
+        "<strong>Integration</strong> — joined-up across channels",
+        "<strong>Independence of location</strong> — accessible anywhere",
+        "<strong>Industry restructuring</strong> — disintermediation, new business models"
+      ],
+      tip: "Apply each 'I' specifically to the company. 'Use intelligence' is generic; 'Track which heritage sites visitors browse most often, then email targeted membership offers' is specific.",
+      example: { q: "E-marketing strategy for HP.", a: "Interactivity: visitor blog with comments. Intelligence: capture which sites users browse. Individualisation: targeted membership offers per region. Integration: link email newsletter to Instagram. Independence: mobile-friendly site for in-visit lookups. Industry: bypass traditional travel agents." }
+    }},
+    { name: "Big Data (3Vs)", guide: {
+      usedWhen: "Asked about data strategy or analytics. Trigger words: 'how should we use big data', 'data analytics opportunity'.",
+      format: [
+        "<strong>3 V's</strong>:",
+        "<strong>Volume</strong> — huge datasets (TB, PB)",
+        "<strong>Velocity</strong> — speed of generation and processing (often real-time)",
+        "<strong>Variety</strong> — structured (databases) AND unstructured (text, video, social)",
+        "Some add: <strong>Veracity</strong> (data quality) and <strong>Value</strong> (does it generate insight?).",
+        "Use cases: predictive analytics, personalisation, fraud detection, operational efficiency."
+      ],
+      tip: "Always pair benefits with risks: privacy regulations (GDPR), data quality, storage cost, skill gap, ethics.",
+      example: { q: "Big data opportunity for Beago.", a: "Volume: millions of ride records. Velocity: real-time GPS for surge pricing. Variety: ride data + customer reviews + driver feedback. Value: predict demand spikes, optimise driver placement. Risk: GDPR compliance for EU expansion." }
+    }},
+    { name: "CRM", guide: {
+      usedWhen: "Customer-focused tasks — improving retention, personalisation, customer experience. Trigger words: 'improve customer relationships', 'reduce churn'.",
+      format: [
+        "<strong>CRM cycle</strong>:",
+        "<strong>Acquire</strong> — attract new customers (targeted marketing)",
+        "<strong>Retain</strong> — keep existing customers (loyalty programs, service)",
+        "<strong>Extend</strong> — sell more to existing customers (upsell, cross-sell)",
+        "<strong>Win back</strong> — recover churned customers",
+        "Tools: customer database, segmentation, automation (email, SMS), feedback loops, loyalty programs."
+      ],
+      tip: "Retention is cheaper than acquisition (often 5-10x). When asked to improve customer outcomes, lead with retention.",
+      example: { q: "CRM strategy for PVS.", a: "Acquire: targeted social media for new pet owners. Retain: vaccination reminder emails, loyalty pricing. Extend: cross-sell pet insurance and grooming. Win-back: reactivation offers for lapsed customers. Tool: integrated CRM linking appointments + medical history + comms." }
+    }},
+    { name: "IT Risks & Security", guide: {
+      usedWhen: "Tech/IT risk tasks. Trigger words: 'evaluate IT risks', 'cybersecurity', 'data protection'.",
+      format: [
+        "<strong>Common IT risks</strong>:",
+        "Cyber attacks (malware, phishing, ransomware, DDoS), Data loss (corruption, deletion), Data breach (unauthorised access), Insider threats, System downtime, Third-party/supplier risk, Compliance (GDPR, HIPAA).",
+        "<strong>Common controls</strong>:",
+        "<strong>Preventive</strong>: firewalls, encryption, access controls, MFA, staff training, patch management.",
+        "<strong>Detective</strong>: SIEM, intrusion detection, audit logs, monitoring.",
+        "<strong>Corrective</strong>: incident response plan, backups + disaster recovery, cyber insurance."
+      ],
+      tip: "Pair every risk with a SPECIFIC control. 'Cybersecurity is important' = 0 marks. 'Implement MFA on all admin accounts to mitigate phishing risk' = 2 marks.",
+      example: { q: "Post-breach controls for NCTech.", a: "Risk: phishing → MFA + staff training. Risk: ransomware → offline backups + endpoint protection. Risk: insider → role-based access + activity monitoring. Risk: third-party → vendor security audits. Plus: incident response plan + cyber insurance for residual risk." }
+    }},
+    { name: "Code of Ethics", guide: {
+      usedWhen: "Any ethics task. Trigger words: 'ethical issues', 'is this ethical', 'recommend ethical action'.",
+      format: [
+        "<strong>5 Fundamental Principles (ACCA)</strong>:",
+        "<strong>Integrity</strong> — straightforward, honest.",
+        "<strong>Objectivity</strong> — no bias, conflicts of interest, undue influence.",
+        "<strong>Professional Competence & Due Care</strong> — maintain skills, act diligently.",
+        "<strong>Confidentiality</strong> — don't disclose info without authority.",
+        "<strong>Professional Behaviour</strong> — comply with laws, avoid bringing profession into disrepute.",
+        "<strong>5 Threats to Objectivity</strong>: Self-interest, Self-review, Advocacy, Familiarity, Intimidation. Each needs a specific safeguard."
+      ],
+      tip: "Formula: name the principle threatened → name the threat type → recommend a specific safeguard. That's a 3-mark answer every time.",
+      example: { q: "PVS internal auditor also runs the IT systems being audited.", a: "Threatens Objectivity. Threat type: Self-review (auditor reviewing own work). Safeguard: separate the IT operations role from the audit role, OR use a different team member for the IT audit." }
+    }},
+    { name: "Public Interest", guide: {
+      usedWhen: "Ethics + governance overlap. Trigger words: 'public interest', 'wider responsibilities', 'beyond the client'.",
+      format: [
+        "Accountants serve <strong>more than the immediate client</strong> — they serve society. The qualification depends on this trust.",
+        "Public interest tensions arise when: client confidentiality conflicts with disclosure obligations; commercial pressure conflicts with integrity; minority shareholders' interests conflict with majority.",
+        "Resolution path: ACCA Code first; if unclear, escalate to ethics partner; document the decision; if still unresolved, may need to disengage."
+      ],
+      tip: "When in doubt, public interest trumps commercial interest. The professional reputation of the qualification depends on this.",
+      example: { q: "Client asks accountant to underreport tax.", a: "Conflict: client commercial interest vs public interest in tax integrity. Action: refuse, advise client of consequences, document in writing, consider whether to continue the engagement. Public interest in honest taxation outweighs client preference." }
+    }},
+    { name: "Chairman vs CEO / NEDs", guide: {
+      usedWhen: "Governance tasks. Trigger words: 'evaluate the governance', 'board structure', 'CEO duality'.",
+      format: [
+        "<strong>Chairman</strong>: runs the BOARD. Sets agenda, ensures NEDs contribute, evaluates board performance. Should be independent.",
+        "<strong>CEO</strong>: runs the COMPANY. Executes strategy, manages execs.",
+        "<strong>Why split?</strong> Power concentration is a major governance risk. UK Corporate Governance Code recommends separation.",
+        "<strong>NEDs (Non-Executive Directors)</strong>: independent of management. Provide oversight, challenge, external perspective. Listed companies: ~half the board should be independent NEDs.",
+        "<strong>4 Sub-committees</strong> (made up of NEDs): Audit (oversees financial reporting), Remuneration (sets exec pay), Nominations (board appointments), Risk."
+      ],
+      tip: "When you spot CEO = Chairman, NO NEDs, NO audit committee — name each gap explicitly AND say what damage results. That's the structure of a high-mark answer.",
+      example: { q: "Governance issues at Corjet (family firm).", a: "1. CEO is also Chair (founder) → power concentration, no challenge. 2. Board has only family members → no independent NEDs → no objective oversight. 3. No audit committee → financial reporting risk. Recommend: appoint independent Chair, recruit 2-3 NEDs, establish audit committee." }
+    }},
+    { name: "Integrated Reporting (6 Capitals)", guide: {
+      usedWhen: "Reporting / sustainability questions. Trigger words: 'integrated reporting', 'how to report value', '6 capitals'.",
+      format: [
+        "Integrated Reporting (IR) tells the value-creation story across <strong>6 capitals</strong>:",
+        "<strong>Financial</strong> — funds available (debt, equity, retained earnings).",
+        "<strong>Manufactured</strong> — physical infrastructure (buildings, equipment).",
+        "<strong>Intellectual</strong> — patents, brand, processes, knowledge.",
+        "<strong>Human</strong> — skills, motivation of employees.",
+        "<strong>Social & Relationship</strong> — relationships with communities, customers, partners.",
+        "<strong>Natural</strong> — environmental resources used (water, air, land).",
+        "Show how inputs (capitals consumed) → activities → outputs → outcomes (capitals affected)."
+      ],
+      tip: "When asked about reporting strategy, mention IR + 6 capitals. It's the modern answer. ESG reporting also fits here.",
+      example: { q: "How should HP report to stakeholders?", a: "Adopt Integrated Reporting. Financial: donations and ticket revenues. Manufactured: 50+ heritage sites. Intellectual: curatorial expertise. Human: 200 staff + 2,000 volunteers. Social: relationships with local communities. Natural: land conservation. Tells full story to donors, government and members." }
+    }}
+  ];
 
   const PAPERS = [
     { slug: "corjetz", title: "Corjetz", sitting: "September 2023", flavor: "Family-owned fertiliser business considering listing. Heavy on governance transition, investment appraisal, and risk review. The first paper in the new format — clean reference point.", themes: ["Governance","Investment","Risk","Family→listed"] },
@@ -1221,7 +1546,7 @@
   // === PROGRESS ===
   function getPhaseStats() {
     const chaptersChecked = Object.keys(state.chapters).filter(k => !k.startsWith('expanded_') && state.chapters[k]).length;
-    const ultraRated = Object.keys(state.ultra).filter(k => state.ultra[k]).length;
+    const ultraRated = Object.keys(state.ultra).filter(k => !k.startsWith('guide_') && state.ultra[k]).length;
     const p1Done = chaptersChecked + ultraRated;
     const p1Total = CHAPTERS.length + ULTRA_TOPICS.length;
     const p2Done = PAPERS.filter(p => state.papers[p.slug + '_done']).length;
@@ -1333,18 +1658,52 @@
   function renderUltra() {
     const container = document.getElementById('ultraList');
     container.innerHTML = '';
-    ULTRA_TOPICS.forEach((name, idx) => {
+    ULTRA_TOPICS.forEach((topic, idx) => {
       const status = state.ultra[idx] || null;
-      const div = document.createElement('div');
-      div.className = 'ultra-item';
-      div.innerHTML = `
-        <span>${name}</span>
-        <div class="ultra-buttons">
-          <button class="ultra-btn green ${status === 'g' ? 'active' : ''}" data-idx="${idx}" data-status="g" title="Know cold"></button>
-          <button class="ultra-btn yellow ${status === 'y' ? 'active' : ''}" data-idx="${idx}" data-status="y" title="Vaguely remember"></button>
-          <button class="ultra-btn red ${status === 'r' ? 'active' : ''}" data-idx="${idx}" data-status="r" title="Don't know"></button>
-        </div>`;
-      div.querySelectorAll('.ultra-btn').forEach(btn => {
+      const expanded = state.ultra['guide_' + idx];
+      const wrap = document.createElement('div');
+      wrap.className = 'ultra-item-wrap' + (expanded ? ' expanded' : '');
+      wrap.innerHTML = `
+        <div class="ultra-item-row">
+          <button class="ultra-name-btn" data-idx="${idx}">
+            <span class="ultra-caret">▶</span>
+            <span>${topic.name}</span>
+          </button>
+          <div class="ultra-buttons">
+            <button class="ultra-btn green ${status === 'g' ? 'active' : ''}" data-idx="${idx}" data-status="g" title="Know cold"></button>
+            <button class="ultra-btn yellow ${status === 'y' ? 'active' : ''}" data-idx="${idx}" data-status="y" title="Vaguely remember"></button>
+            <button class="ultra-btn red ${status === 'r' ? 'active' : ''}" data-idx="${idx}" data-status="r" title="Don't know"></button>
+          </div>
+        </div>
+        <div class="ultra-guide">
+          <div class="guide-section">
+            <div class="guide-label">Used when</div>
+            <p>${topic.guide.usedWhen}</p>
+          </div>
+          <div class="guide-section">
+            <div class="guide-label">How to format</div>
+            <ul>${topic.guide.format.map(f => `<li>${f}</li>`).join('')}</ul>
+          </div>
+          <div class="guide-section">
+            <div class="guide-label">Key tip</div>
+            <div class="guide-tip">${topic.guide.tip}</div>
+          </div>
+          <div class="guide-section">
+            <div class="guide-label">Mini example</div>
+            <div class="guide-example">
+              <span class="ex-q">${topic.guide.example.q}</span>
+              ${topic.guide.example.a}
+            </div>
+          </div>
+        </div>
+      `;
+      wrap.querySelector('.ultra-name-btn').addEventListener('click', (e) => {
+        const i = parseInt(e.currentTarget.dataset.idx);
+        state.ultra['guide_' + i] = !state.ultra['guide_' + i];
+        saveState();
+        renderUltra();
+      });
+      wrap.querySelectorAll('.ultra-btn').forEach(btn => {
         btn.addEventListener('click', (e) => {
           const i = parseInt(e.target.dataset.idx);
           const s = e.target.dataset.status;
@@ -1352,7 +1711,7 @@
           saveState(); renderUltra(); renderProgress();
         });
       });
-      container.appendChild(div);
+      container.appendChild(wrap);
     });
   }
   function renderPapers() {
