@@ -383,6 +383,15 @@
   .guide-example { background: var(--bg-soft); border-left: 2px solid var(--gold); border-radius: 4px; padding: 10px 14px; font-size: 12.5px; line-height: 1.55; margin-top: 6px; color: var(--ink); }
   .guide-example .ex-q { font-weight: 500; color: var(--ink); margin-bottom: 6px; display: block; font-style: italic; }
   .guide-tip { background: var(--accent-soft); border-left: 2px solid var(--accent); padding: 8px 12px; border-radius: 4px; font-size: 12.5px; color: var(--ink); margin-top: 6px; }
+  .guide-sources { padding-top: 12px; margin-top: 4px; border-top: 1px dashed var(--line); }
+  .source-links { display: flex; flex-direction: column; gap: 6px; margin-top: 6px; }
+  .source-link { display: flex; align-items: center; gap: 10px; padding: 9px 12px; background: var(--bg-soft); border: 1px solid var(--line); border-radius: 6px; text-decoration: none; color: var(--ink); transition: all 0.15s; }
+  .source-link:hover { border-color: var(--accent); background: var(--bg-card); transform: translateX(2px); }
+  .source-link .src-icon { font-size: 14px; flex-shrink: 0; }
+  .source-link .src-text { font-size: 12.5px; color: var(--ink-soft); }
+  .source-link .src-text strong { color: var(--ink); font-weight: 600; }
+  .source-link-ultra:hover { border-color: var(--accent); }
+  .source-link-kaplan:hover { border-color: var(--gold); }
   @media (max-width: 640px) { .ultra-guide { padding: 14px 14px 16px 14px; } }
 
 
@@ -1044,6 +1053,8 @@
       ],
       tip: "Always tie back to the scenario's country and industry. Generic PESTEL = no marks. Look for overlapping points across letters (e.g. tax = political + legal).",
       example: { q: "Q: Analyse the macro environment of Corjet (UK-based aviation, 2023).", a: "Political: Recent UK aviation policy reforms — favourable, supports expansion. Economic: High inflation post-pandemic — unfavourable, raises fuel and labour costs. Social: Growing demand for sustainable travel — favourable, supports green aviation strategy..." }
+    ,
+      sources: { ultra: 5, kaplanLabel: "Ch 3 · Strategic analysis" }
     }},
     { name: "Porter's 5 Forces", guide: {
       usedWhen: "Industry/micro/competitive environment analysis. Used when assessing how attractive an industry is OR analysing competition. Trigger words: 'industry analysis', 'competitive forces', 'attractiveness of industry'.",
@@ -1054,6 +1065,8 @@
       ],
       tip: "For each force, ask: 'Is this making life HARDER or EASIER for our company?' Be decisive — examiners want a clear high/low call.",
       example: { q: "Q: Analyse the competitive forces in the budget airline industry.", a: "Threat of New Entrants: HIGH — low capital required for online ticketing, deregulation in EU. Power of Buyers: HIGH — customers easily compare prices online. Power of Suppliers: HIGH — only 2 major aircraft makers (Boeing, Airbus). Substitutes: HIGH — high-speed rail in Europe. Rivalry: HIGH — many low-cost carriers competing on same routes. → Industry is unattractive." }
+    ,
+      sources: { ultra: 6, kaplanLabel: "Ch 3 · Strategic analysis" }
     }},
     { name: "SFA Framework", guide: {
       usedWhen: "Evaluating a PROPOSED strategy — usually an acquisition or new venture. Trigger words: 'evaluate the proposal to acquire...', 'evaluate the option of opening...', 'should we proceed with...'.",
@@ -1065,6 +1078,8 @@
       ],
       tip: "This is Sir Hasan's most-loved framework. Use the 'Para 1, Para 2, Para 3' structure under each S/F/A heading and you'll never run out of things to say.",
       example: { q: "Q: Assess the suitability, acceptability and feasibility of the AI flight simulator investment (Corjet, Sept 2023).", a: "SUITABILITY: Aligns with Corjet's core value of innovation; AI offers more realistic simulations improving pilot safety; reduces training time by 4 months. ACCEPTABILITY: Corjet is family-managed so owners must agree; financial projections show positive NPV — reasonable return. FEASIBILITY: Corjet has the financial resources; partnership with AI vendor reduces technical capability gap." }
+    ,
+      sources: { ultra: 9, kaplanLabel: "Ch 5 · Strategic choice" }
     }},
     { name: "SWOT / TOWS", guide: {
       usedWhen: "Holistic position analysis combining internal + external. Trigger words: 'analyse the strategic position', 'identify strengths and weaknesses', 'SWOT analysis'.",
@@ -1075,6 +1090,8 @@
       ],
       tip: "If asked to 'analyse position' use SWOT. If asked to 'recommend strategies' use TOWS. The TOWS extension is what separates pass from merit.",
       example: { q: "Mini SWOT for Historic Places (UK heritage charity).", a: "S: Strong volunteer base, royal charter status. W: Aging visitor demographic, declining donations. O: Growing 'staycation' trend post-pandemic. T: Government grant cuts, rising energy costs at sites. TOWS-SO: Use volunteer base to launch new staycation packages." }
+    ,
+      sources: { ultra: 14, kaplanLabel: "Ch 3 · Strategic analysis" }
     }},
     { name: "Corporate Parenting / BCG", guide: {
       usedWhen: "Portfolio analysis — when company has multiple business units, products, or services. Trigger words: 'analyse the portfolio', 'evaluate the product mix', 'corporate-level strategy'.",
@@ -1088,6 +1105,8 @@
       ],
       tip: "Don't just label — recommend what to DO with each. 'X is a Dog' = 1 mark. 'X is a Dog, recommend phased divestment to free capital for question-mark unit Y' = 3 marks.",
       example: { q: "BCG for Beago TNC (mobility platform).", a: "Ride-sharing core service: CASH COW (mature market, dominant share — milk for cash). Food delivery: QUESTION MARK (high growth, low share — invest heavily or divest). E-scooter trial: DOG (saturated market, low share — consider exit)." }
+    ,
+      sources: { ultra: 16, kaplanLabel: "Ch 5 · Strategic choice" }
     }},
     { name: "Ansoff Matrix", guide: {
       usedWhen: "Recommending growth direction. Trigger words: 'how should we grow?', 'recommend a growth strategy', 'evaluate the new product/market move'.",
@@ -1100,6 +1119,8 @@
       ],
       tip: "Risk increases as you move away from the 'existing/existing' corner. Always factor risk into your recommendation. Diversification needs strong justification.",
       example: { q: "Ansoff classification for PVS adding pet insurance.", a: "Existing market (current pet owners) + new product (insurance) = Product Development. Lower risk than diversification because customer base is known." }
+    ,
+      sources: { ultra: 16, kaplanLabel: "Ch 5 · Strategic choice" }
     }},
     { name: "Harmon's Process Matrix", guide: {
       usedWhen: "Asked to evaluate or improve business processes. Trigger words: 'evaluate the process', 'process improvement', 'redesign'.",
@@ -1112,6 +1133,8 @@
       ],
       tip: "The 'high importance + high complexity' quadrant is where competitive advantage lives. Never outsource these.",
       example: { q: "PVS process classification.", a: "Veterinary diagnosis = high importance + high complexity (keep in-house, invest in vet training). Payroll = low importance + low complexity (outsource or automate)." }
+    ,
+      sources: { ultra: 18, kaplanLabel: "Ch 16 · Organising for success" }
     }},
     { name: "Mendelow's Matrix", guide: {
       usedWhen: "Stakeholder analysis. Trigger words: 'identify key stakeholders', 'how should stakeholders be managed', 'stakeholder concerns'.",
@@ -1124,6 +1147,8 @@
       ],
       tip: "For each stakeholder you place, recommend a SPECIFIC management action. 'Manage closely' is generic. 'Hold quarterly briefings with the institutional shareholders' is specific.",
       example: { q: "Mendelow for Historic Places' new ticketing system.", a: "Trustees: high power, high interest → Key Players (board approval, monthly reports). Volunteers: low power, high interest → Keep Informed (newsletter updates). Government heritage body: high power, low interest → Keep Satisfied (compliance reporting). Casual visitors: low/low → Minimal Effort." }
+    ,
+      sources: { ultra: 19, kaplanLabel: "Ch 9 · Stakeholders & CSR" }
     }},
     { name: "Cultural Web", guide: {
       usedWhen: "Analysing organisational culture — usually as part of a change task. Trigger words: 'analyse the culture', 'cultural barriers to change', 'why is change being resisted'.",
@@ -1138,6 +1163,8 @@
       ],
       tip: "If you want to CHANGE a culture, you have to change multiple elements of the web — culture is sticky. Don't just describe — explain how each element supports or blocks the proposed change.",
       example: { q: "Cultural Web of NCTech (post-data-breach).", a: "Stories: founder myth of 'move fast and break things'. Symbols: open-plan office, no dress code. Power: tech leads override governance. Structure: flat. Control: speed-of-shipping rewarded over security. Rituals: daily standups, no security reviews. → Paradigm: speed > safety. To fix breach culture, ALL 6 must change." }
+    ,
+      sources: { ultra: 20, kaplanLabel: "Ch 21 · Managing strategic change" }
     }},
     { name: "Context of Change", guide: {
       usedWhen: "Asked to evaluate readiness for change OR design a change approach. Trigger words: 'how should change be managed', 'is the organisation ready for change'.",
@@ -1148,6 +1175,8 @@
       ],
       tip: "These 8 features tell you what change approach will work. Low Capability + Low Readiness = need education + participation. High Power + Urgent Time = direction/coercion may be needed.",
       example: { q: "Change context for Historic Places' digital transformation.", a: "Time: not urgent (multi-year). Scope: transformation (whole way of working). Preservation: heritage values must remain. Diversity: high (volunteers + paid staff). Capability: low (limited digital skills). Capacity: limited budget. Readiness: mixed. Power: trustees support. → Recommend phased, participative approach with training." }
+    ,
+      sources: { ultra: 22, kaplanLabel: "Ch 21 · Managing strategic change" }
     }},
     { name: "Risk Mitigation (TARA)", guide: {
       usedWhen: "Asked to recommend how to handle identified risks. Trigger words: 'recommend mitigation', 'how should this risk be managed', 'risk response'.",
@@ -1160,6 +1189,8 @@
       ],
       tip: "Match each specific risk in the scenario to a specific TARA response with a specific control. 'Transfer the risk' isn't enough. 'Transfer via cyber insurance with $X coverage' is.",
       example: { q: "TARA for NCTech post-breach risks.", a: "Future data breach: REDUCE (encryption + staff training + incident response plan). Lawsuits from current breach: TRANSFER (cyber liability insurance). Reputational damage: REDUCE (PR strategy, customer compensation). Operating in highly regulated EU market: ACCEPT (cost of compliance is bearable)." }
+    ,
+      sources: { ultra: 24, kaplanLabel: "Ch 14 · Risk management" }
     }},
     { name: "Financial Ratios", guide: {
       usedWhen: "Performance analysis tasks. Trigger words: 'analyse financial performance', 'evaluate the financials', 'comment on profitability'.",
@@ -1173,6 +1204,8 @@
       ],
       tip: "Calculation is 1 mark; interpretation is 2 marks. Always say WHY the ratio moved (e.g., 'margin fell because raw material costs rose 15% per the scenario').",
       example: { q: "Operating margin analysis.", a: "Operating margin fell from 12% to 8% YoY. The decline reflects the 15% increase in fuel costs noted in Exhibit 2, partly offset by fare increases. Margin is now below the industry average of 10%, signalling competitive pressure." }
+    ,
+      sources: { ultra: 26, kaplanLabel: "Ch 4 · Performance analysis" }
     }},
     { name: "Financial Projections", guide: {
       usedWhen: "Asked to assess investment or project financials. Trigger words: 'evaluate the financial projections', 'assess the investment', 'review the proposal financially'.",
@@ -1186,6 +1219,8 @@
       ],
       tip: "Always question 2-3 assumptions specifically. That's the Scepticism professional skill — worth easy marks.",
       example: { q: "Critique the AI simulator projection (Corjet).", a: "1. NPV: positive at $4.2M — looks good. 2. Payback: 3 years — within normal limit. 3. Assumption challenge: 30% revenue growth in year 1 seems aggressive given industry growth of 5%. 4. Tax: capital allowances appear correctly applied. 5. Sensitivity: a 10% shortfall in revenue would turn NPV negative — narrow margin." }
+    ,
+      sources: { ultra: 27, kaplanLabel: "Ch 20 · Financial decision making" }
     }},
     { name: "Financing Structure", guide: {
       usedWhen: "Recommending how to fund a project or strategy. Trigger words: 'how should this be financed', 'recommend a financing structure'.",
@@ -1198,6 +1233,8 @@
       ],
       tip: "For private/family-owned firms, usually recommend retained earnings + debt. For listed firms, the answer often depends on existing capital structure and cost of capital.",
       example: { q: "Financing the AI simulator (Corjet, family-owned).", a: "Internal cash: limited reserves. Equity: would require external investors and dilute family control — not desirable. Debt: current gearing is low (30%), interest cover strong, project has stable cash flows. → Recommend bank loan or bond, preserving family ownership." }
+    ,
+      sources: { ultra: 28, kaplanLabel: "Ch 20 · Financial decision making" }
     }},
     { name: "Budgets & MIS", guide: {
       usedWhen: "Evaluating control systems or management info. Trigger words: 'evaluate the budgeting process', 'comment on management information'.",
@@ -1207,6 +1244,8 @@
       ],
       tip: "When evaluating an existing system, score it against ACCURATE. When recommending a new approach, match the budget type to the business environment (volatile = rolling, mature = incremental).",
       example: { q: "Budget for a fast-growing startup.", a: "Incremental budgeting won't work as historical data is unrepresentative. Rolling budgets recommended — review quarterly, adapt to market changes. Zero-based may be useful for the first year to instill cost discipline." }
+    ,
+      sources: { ultra: 29, kaplanLabel: "Ch 12 · Internal control & reporting" }
     }},
     { name: "Project Management (PID)", guide: {
       usedWhen: "Project setup, evaluation, or troubleshooting. Trigger words: 'should this project proceed', 'why is the project failing', 'recommend project governance'.",
@@ -1218,6 +1257,8 @@
       ],
       tip: "If a project is failing, ask: (a) Is the PID clear? (b) Is the sponsor doing their job? (c) Is the business case still valid? Most failures trace back to one of these.",
       example: { q: "Why is the digital transformation project failing? (HP)", a: "1. PID was vague — no clear deliverables. 2. Sponsor (CEO) is hands-off. 3. No business case review at gates — the original ROI assumptions are now stale. → Recommend formal project re-baseline." }
+    ,
+      sources: { ultra: 30, kaplanLabel: "Ch 19 · Project management" }
     }},
     { name: "E-Business", guide: {
       usedWhen: "Asked about going digital, online channels, or e-commerce strategy. Trigger words: 'develop an online strategy', 'e-business model'.",
@@ -1229,6 +1270,8 @@
       ],
       tip: "Always discuss BOTH benefits and risks. Examiners reward balanced thinking.",
       example: { q: "Should HP launch an online merchandise store?", a: "B2C model. Benefits: reach beyond physical site visitors, capture donor data. Risks: cyber attacks on payment data, fulfillment costs, may cannibalise physical shop. Implementation: integrate with existing Gift Aid system." }
+    ,
+      sources: { ultra: 34, kaplanLabel: "Ch 17 · Technology in business" }
     }},
     { name: "E-Marketing", guide: {
       usedWhen: "Asked about digital marketing strategy. Trigger words: 'how to market online', 'digital marketing approach'.",
@@ -1243,6 +1286,8 @@
       ],
       tip: "Apply each 'I' specifically to the company. 'Use intelligence' is generic; 'Track which heritage sites visitors browse most often, then email targeted membership offers' is specific.",
       example: { q: "E-marketing strategy for HP.", a: "Interactivity: visitor blog with comments. Intelligence: capture which sites users browse. Individualisation: targeted membership offers per region. Integration: link email newsletter to Instagram. Independence: mobile-friendly site for in-visit lookups. Industry: bypass traditional travel agents." }
+    ,
+      sources: { ultra: 36, kaplanLabel: "Ch 18 · E-marketing" }
     }},
     { name: "Big Data (3Vs)", guide: {
       usedWhen: "Asked about data strategy or analytics. Trigger words: 'how should we use big data', 'data analytics opportunity'.",
@@ -1256,6 +1301,8 @@
       ],
       tip: "Always pair benefits with risks: privacy regulations (GDPR), data quality, storage cost, skill gap, ethics.",
       example: { q: "Big data opportunity for Beago.", a: "Volume: millions of ride records. Velocity: real-time GPS for surge pricing. Variety: ride data + customer reviews + driver feedback. Value: predict demand spikes, optimise driver placement. Risk: GDPR compliance for EU expansion." }
+    ,
+      sources: { ultra: 38, kaplanLabel: "Ch 17 · Technology in business" }
     }},
     { name: "CRM", guide: {
       usedWhen: "Customer-focused tasks — improving retention, personalisation, customer experience. Trigger words: 'improve customer relationships', 'reduce churn'.",
@@ -1269,6 +1316,8 @@
       ],
       tip: "Retention is cheaper than acquisition (often 5-10x). When asked to improve customer outcomes, lead with retention.",
       example: { q: "CRM strategy for PVS.", a: "Acquire: targeted social media for new pet owners. Retain: vaccination reminder emails, loyalty pricing. Extend: cross-sell pet insurance and grooming. Win-back: reactivation offers for lapsed customers. Tool: integrated CRM linking appointments + medical history + comms." }
+    ,
+      sources: { ultra: 40, kaplanLabel: "Ch 17 · Technology in business" }
     }},
     { name: "IT Risks & Security", guide: {
       usedWhen: "Tech/IT risk tasks. Trigger words: 'evaluate IT risks', 'cybersecurity', 'data protection'.",
@@ -1282,6 +1331,8 @@
       ],
       tip: "Pair every risk with a SPECIFIC control. 'Cybersecurity is important' = 0 marks. 'Implement MFA on all admin accounts to mitigate phishing risk' = 2 marks.",
       example: { q: "Post-breach controls for NCTech.", a: "Risk: phishing → MFA + staff training. Risk: ransomware → offline backups + endpoint protection. Risk: insider → role-based access + activity monitoring. Risk: third-party → vendor security audits. Plus: incident response plan + cyber insurance for residual risk." }
+    ,
+      sources: { ultra: 41, kaplanLabel: "Ch 17 · Technology in business" }
     }},
     { name: "Code of Ethics", guide: {
       usedWhen: "Any ethics task. Trigger words: 'ethical issues', 'is this ethical', 'recommend ethical action'.",
@@ -1296,6 +1347,8 @@
       ],
       tip: "Formula: name the principle threatened → name the threat type → recommend a specific safeguard. That's a 3-mark answer every time.",
       example: { q: "PVS internal auditor also runs the IT systems being audited.", a: "Threatens Objectivity. Threat type: Self-review (auditor reviewing own work). Safeguard: separate the IT operations role from the audit role, OR use a different team member for the IT audit." }
+    ,
+      sources: { ultra: 44, kaplanLabel: "Ch 15 · Professionalism & ethics" }
     }},
     { name: "Public Interest", guide: {
       usedWhen: "Ethics + governance overlap. Trigger words: 'public interest', 'wider responsibilities', 'beyond the client'.",
@@ -1306,6 +1359,8 @@
       ],
       tip: "When in doubt, public interest trumps commercial interest. The professional reputation of the qualification depends on this.",
       example: { q: "Client asks accountant to underreport tax.", a: "Conflict: client commercial interest vs public interest in tax integrity. Action: refuse, advise client of consequences, document in writing, consider whether to continue the engagement. Public interest in honest taxation outweighs client preference." }
+    ,
+      sources: { ultra: 45, kaplanLabel: "Ch 15 · Professionalism & ethics" }
     }},
     { name: "Chairman vs CEO / NEDs", guide: {
       usedWhen: "Governance tasks. Trigger words: 'evaluate the governance', 'board structure', 'CEO duality'.",
@@ -1318,6 +1373,8 @@
       ],
       tip: "When you spot CEO = Chairman, NO NEDs, NO audit committee — name each gap explicitly AND say what damage results. That's the structure of a high-mark answer.",
       example: { q: "Governance issues at Corjet (family firm).", a: "1. CEO is also Chair (founder) → power concentration, no challenge. 2. Board has only family members → no independent NEDs → no objective oversight. 3. No audit committee → financial reporting risk. Recommend: appoint independent Chair, recruit 2-3 NEDs, establish audit committee." }
+    ,
+      sources: { ultra: 47, kaplanLabel: "Ch 8 · The board of directors" }
     }},
     { name: "Integrated Reporting (6 Capitals)", guide: {
       usedWhen: "Reporting / sustainability questions. Trigger words: 'integrated reporting', 'how to report value', '6 capitals'.",
@@ -1333,6 +1390,8 @@
       ],
       tip: "When asked about reporting strategy, mention IR + 6 capitals. It's the modern answer. ESG reporting also fits here.",
       example: { q: "How should HP report to stakeholders?", a: "Adopt Integrated Reporting. Financial: donations and ticket revenues. Manufactured: 50+ heritage sites. Intellectual: curatorial expertise. Human: 200 staff + 2,000 volunteers. Social: relationships with local communities. Natural: land conservation. Tells full story to donors, government and members." }
+    ,
+      sources: { ultra: 57, kaplanLabel: "Ch 11 · Reporting to stakeholders" }
     }}
   ];
 
@@ -1693,6 +1752,19 @@
             <div class="guide-example">
               <span class="ex-q">${topic.guide.example.q}</span>
               ${topic.guide.example.a}
+            </div>
+          </div>
+          <div class="guide-section guide-sources">
+            <div class="guide-label">Read more</div>
+            <div class="source-links">
+              <a href="./materials/ultra-notes.pdf#page=${topic.guide.sources.ultra}" target="_blank" class="source-link source-link-ultra" title="Open Ultra Notes at this topic's page">
+                <span class="src-icon">⚡</span>
+                <span class="src-text"><strong>Ultra Notes</strong> · slide ${topic.guide.sources.ultra}</span>
+              </a>
+              <a href="./materials/kaplan-study-text.pdf" target="_blank" class="source-link source-link-kaplan" title="Open Kaplan textbook (use Ctrl+F to find topic)">
+                <span class="src-icon">📖</span>
+                <span class="src-text"><strong>Kaplan</strong> · ${topic.guide.sources.kaplanLabel}</span>
+              </a>
             </div>
           </div>
         </div>
